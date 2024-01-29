@@ -1,0 +1,43 @@
+version: "3.9"
+
+services:
+  web:
+    build: .
+    container_name: JobHubWeb
+    restart: on-failure
+    volumes:
+      - .:/app
+      - ./static:/app/static
+      - ./media:/app/media
+    command: bash start.sh
+    ports:
+      - "8081:8000"
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+
+  db:
+    container_name: JobHubWebDb
+    image: postgres:15
+    env_file:
+      - ./.env
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  nginx:
+    build: ./nginx
+    container_name: JobHubWebNginx
+    restart: on-failure
+    ports:
+      - "8082:80"
+    volumes:
+      - ./static:/static
+      - ./media:/media
+    depends_on:
+      - web
+
+volumes:
+  pgdata: {}
