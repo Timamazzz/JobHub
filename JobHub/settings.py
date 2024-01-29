@@ -50,6 +50,8 @@ INSTALLED_APPS = [
     'docs_app',
     'users_app',
     'feed_app',
+    'employers_app',
+    'applicants_app',
 
 ]
 

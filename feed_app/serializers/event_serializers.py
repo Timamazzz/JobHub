@@ -31,11 +31,17 @@ class ImageSerializer(serializers.ModelSerializer):
 
 class EventRetrieveSerializer(serializers.ModelSerializer):
     gallery = serializers.SerializerMethodField()
+    preview_image = serializers.SerializerMethodField()
 
     class Meta:
         model = Event
-        fields = '__all__'
+        exclude = ['id']
 
     def get_gallery(self, obj):
         images = EventImage.objects.filter(event=obj, is_preview=False)
         return ImageSerializer(images, many=True).data
+
+    def get_preview_image(self, event):
+        preview_image = EventImage.objects.filter(event=event, is_preview=True).first()
+
+        return preview_image.file.url if preview_image else None

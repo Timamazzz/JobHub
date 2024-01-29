@@ -30,11 +30,16 @@ class ExcursionImageSerializer(serializers.ModelSerializer):
 
 class ExcursionRetrieveSerializer(serializers.ModelSerializer):
     gallery = serializers.SerializerMethodField()
+    preview_image = serializers.SerializerMethodField()
 
     class Meta:
         model = Excursion
-        fields = '__all__'
+        exclude = ['id']
 
     def get_gallery(self, obj):
         images = ExcursionImage.objects.filter(excursion=obj, is_preview=False)
         return ExcursionImageSerializer(images, many=True).data
+
+    def get_preview_image(self, excursion):
+        preview_image = ExcursionImage.objects.filter(excursion=excursion, is_preview=True).first()
+        return preview_image.file.url if preview_image else None

@@ -3,6 +3,8 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.core.validators import RegexValidator
 
+from users_app.enums import UserRoleEnum
+
 
 # Create your models here.
 class PhoneNumberValidator(RegexValidator):
@@ -13,21 +15,21 @@ class PhoneNumberValidator(RegexValidator):
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
-    def _create_user(self, email, password, **extra_fields):
-        if not email:
-            raise ValueError('The Email field must be set')
+    def _create_user(self, username, password, **extra_fields):
+        if not username:
+            raise ValueError('The username field must be set')
 
-        email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
+        username = self.normalize_email(username)
+        user = self.model(username=username, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_user(self, email, password=None, **extra_fields):
+    def create_user(self, username, password=None, **extra_fields):
         extra_fields.setdefault('is_superuser', False)
-        return self._create_user(email, password, **extra_fields)
+        return self._create_user(username, password, **extra_fields)
 
-    def create_superuser(self, email, password, **extra_fields):
+    def create_superuser(self, username, password, **extra_fields):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_active', True)
@@ -37,50 +39,28 @@ class UserManager(BaseUserManager):
         if extra_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must have is_superuser=True.')
 
-        return self._create_user(email, password, **extra_fields)
+        return self._create_user(username, password, **extra_fields)
 
 
 class User(AbstractUser):
-    username = models.CharField(
-        max_length=150,
-        unique=True,
-        blank=True, null=True,
+    role = models.CharField(
+        max_length=20,
+        choices=[(role.name, role.value) for role in UserRoleEnum],
+        default=UserRoleEnum.APPLICANT.name,
+        verbose_name="Роль"
     )
 
-    email = models.EmailField(unique=True, blank=False, null=False, verbose_name="Email")
-
-    fio = models.CharField(
-        max_length=255,
-        blank=True, null=True,
-        verbose_name="ФИО"
-    )
-
-    birth_date = models.DateField(
-        blank=True, null=True,
-        verbose_name="Дата рождения"
-    )
-
-    resume = models.TextField(
-        blank=True, null=True,
-        verbose_name="Резюме"
-    )
-
-    phone_number = models.CharField(
-        validators=[PhoneNumberValidator()],
-        max_length=17,
-        unique=True,
-        blank=True,
-        null=True,
-        verbose_name="Номер телефона"
-    )
     objects = UserManager()
-
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
 
     class Meta:
         verbose_name = "Пользователь"
         verbose_name_plural = "Пользователи"
 
     def __str__(self):
-        return self.email
+        return self.username
+
+
+
+
+
+
