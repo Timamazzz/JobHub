@@ -38,5 +38,5 @@ class EmployerViewSet(ModelViewSet):
 
             return Response({'detail': 'Data sent for moderation'}, status=status.HTTP_200_OK)
         else:
-            return Response({'error': 'Invalid data'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Invalid data', 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
