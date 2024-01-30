@@ -18,7 +18,7 @@ class EmployerModerationDataSerializer(serializers.ModelSerializer):
 
 
 class EmployerLoginSerializer(serializers.Serializer):
-    username = serializers.CharField(required=True, read_only=True, label='Логин', )
+    username = serializers.CharField(required=True, label='Логин', )
     password = PasswordField(label='Пароль', style={'tip_message': 'Здесь какая то подскзка, но я ее не знаю'})
 
     class Meta:
