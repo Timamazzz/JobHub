@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from JobHub.utils.fields import PhoneField
+from JobHub.utils.fields import PhoneField, PasswordField
 from employers_app.models import Employer
 
 
@@ -15,3 +15,15 @@ class EmployerModerationDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = Employer
         fields = ('name', 'inn', 'legal_address', 'contact_person_fio', 'phone_number')
+
+
+class EmployerLoginSerializer(serializers.Serializer):
+    username = serializers.CharField(required=True, read_only=True, label='Логин', )
+    password = PasswordField(label='Пароль', style={'tip_message': 'Здесь какая то подскзка, но я ее не знаю'})
+
+    class Meta:
+        model = Employer
+        fields = ('username', 'password')
+        extra_kwargs = {
+            'password': {'help_text': 'Восстановление пароля'},
+        }
