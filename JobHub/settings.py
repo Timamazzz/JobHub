@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     'feed_app',
     'employers_app',
     'applicants_app',
-
+    'job_openings_app',
 ]
 
 MIDDLEWARE = [

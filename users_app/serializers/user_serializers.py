@@ -12,5 +12,5 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserRetrieveSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Event
+        model = User
         fields = '__all__'

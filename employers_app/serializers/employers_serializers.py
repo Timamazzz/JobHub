@@ -20,10 +20,9 @@ class EmployerModerationDataSerializer(serializers.ModelSerializer):
 class EmployerLoginSerializer(serializers.Serializer):
     username = serializers.CharField(required=True, label='Логин', )
     password = PasswordField(label='Пароль',
-                             help_text = 'Восстановление пароля',
-                             style={'tip_message': 'Здесь какая то подскзка, но я ее не знаю'},)
+                             help_text='Восстановление пароля',
+                             style={'tip_message': 'Здесь какая то подскзка, но я ее не знаю'}, )
 
     class Meta:
         model = Employer
         fields = ('username', 'password')
-
