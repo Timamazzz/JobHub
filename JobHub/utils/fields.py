@@ -14,7 +14,7 @@ class PhoneField(serializers.CharField):
 
         if 'mask' in self.style:
             self.regex = kwargs.get('regex', PHONE_FIELD_DEFAULT_REGEX)
-            self.validators.append(MaskValidator(regex=self.regex))
+            #self.validators.append(MaskValidator(regex=self.regex))
 
 
 class PasswordField(serializers.CharField):
