@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from JobHub.utils.consts import PHONE_FIELD_DEFAULT_PLACEHOLDER, PHONE_FIELD_DEFAULT_MASK, PHONE_FIELD_DEFAULT_LABEL
+from JobHub.utils.consts import PHONE_FIELD_DEFAULT_PLACEHOLDER, PHONE_FIELD_DEFAULT_MASK, PHONE_FIELD_DEFAULT_LABEL, \
+    PHONE_FIELD_DEFAULT_REGEX
 from JobHub.utils.validators import MaskValidator
 
 
@@ -12,7 +13,8 @@ class PhoneField(serializers.CharField):
         self.label = kwargs.get('label', PHONE_FIELD_DEFAULT_LABEL)
 
         if 'mask' in self.style:
-            self.validators.append(MaskValidator(self.style['mask']))
+            self.regex = kwargs.get('regex', PHONE_FIELD_DEFAULT_REGEX)
+            self.validators.append(MaskValidator(regex=self.regex))
 
 
 class PasswordField(serializers.CharField):
