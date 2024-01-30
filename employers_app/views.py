@@ -28,7 +28,7 @@ class EmployerViewSet(ModelViewSet):
             html_message = f'<p>Data for moderation has been received:</p><pre>{serializer.data}</pre>'
 
             mail.send(
-                'timama.feik@mail.ru',
+                'timforworking@mail.ru',
                 settings.DEFAULT_FROM_EMAIL,
                 subject=subject,
                 message=message,
