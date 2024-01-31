@@ -5,6 +5,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 
 from JobHub.utils.ModelViewSet import ModelViewSet
+from employers_app.models import Employer
 from job_openings_app.filters.job_opening_filters import JobOpeningFilter
 from job_openings_app.models import JobOpening
 from job_openings_app.serializers.job_opening_serializers import JobOpeningSerializer, JobOpeningListSerializer, \
@@ -27,12 +28,15 @@ class JobOpeningViewSet(ModelViewSet):
     }
 
     def perform_create(self, serializer):
-        employer = self.request.user.employer
+        try:
+            employer = Employer.objects.get(user=self.request.user)
+        except Employer.DoesNotExist:
+            raise ValidationError("User does not have associated Employer")
 
         if employer:
             serializer.save(employer=employer)
         else:
-            raise ValidationError("User does not have associated Employer.")
+            raise ValidationError("User does not have associated Employer")
 
     @action(detail=True, methods=['post'], url_path='found-applicants')
     def found_applicants(self, request, pk=None):
