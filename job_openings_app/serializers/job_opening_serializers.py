@@ -12,10 +12,35 @@ class JobOpeningSerializer(serializers.ModelSerializer):
 class JobOpeningListSerializer(serializers.ModelSerializer):
     class Meta:
         model = JobOpening
-        fields = ('id', 'job_type', 'job_category', 'job_activity', 'title')
+        fields = ('id', 'job_type', 'job_category', 'job_activity', 'title', 'description', 'salary_min', 'salary_max',
+                  'employer.name', 'created_at', 'applicants')
 
 
-class JobOpeningCreateSerializer(serializers.ModelSerializer):
+class JobOpeningCreateUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = JobOpening
-        fields = ()
+        fields = ('job_type', 'job_category', 'job_activity', 'title', 'salary_min', 'salary_max', 'description',
+                  'employer')
+        extra_kwargs = {
+            'salary_min': {
+                'style': {'placeholder': '₽',
+                          'help_text': 'Заполните одно поле или укажите диапазон заработной платы. Оставьте поля '
+                                       'пустыми, если оплата не предполагается'}
+            },
+            'salary_max': {
+                'style': {'placeholder': '₽', }
+            }
+        }
+
+
+class JobOpeningFoundApplicantSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = JobOpening
+        fields = ('id', 'employee_found', )
+
+
+class JobOpeningMoveToArchiveSerializer(serializers.Serializer):
+
+    class Meta:
+        fields = ('id', 'archived', )
