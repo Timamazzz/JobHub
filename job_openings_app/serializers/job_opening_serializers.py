@@ -31,7 +31,8 @@ class JobOpeningCreateUpdateSerializer(serializers.ModelSerializer):
             },
             'salary_max': {
                 'style': {'placeholder': '₽', }
-            }
+            },
+            'employer': {'required': False}
         }
 
 
