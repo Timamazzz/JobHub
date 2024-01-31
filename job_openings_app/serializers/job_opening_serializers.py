@@ -25,9 +25,9 @@ class JobOpeningCreateUpdateSerializer(serializers.ModelSerializer):
                   'employer')
         extra_kwargs = {
             'salary_min': {
-                'style': {'placeholder': '₽',
-                          'help_text': 'Заполните одно поле или укажите диапазон заработной платы. Оставьте поля '
-                                       'пустыми, если оплата не предполагается'}
+                'style': {'placeholder': '₽',},
+                'help_text': 'Заполните одно поле или укажите диапазон заработной платы. Оставьте поля '
+                             'пустыми, если оплата не предполагается'
             },
             'salary_max': {
                 'style': {'placeholder': '₽', }
