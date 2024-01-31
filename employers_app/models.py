@@ -21,4 +21,5 @@ class Employer(models.Model):
         verbose_name="Номер телефона"
     )
 
+    description = models.TextField(verbose_name="Описание", blank=True, null=True)
     contact_person_email = models.EmailField(blank=True, null=True, verbose_name="Email контактного лица")
