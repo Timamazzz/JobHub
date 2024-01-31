@@ -38,7 +38,7 @@ class JobOpeningCreateUpdateSerializer(serializers.ModelSerializer):
 class JobOpeningFoundApplicantSerializer(serializers.ModelSerializer):
     class Meta:
         model = JobOpening
-        fields = ('id', 'employee_found',)
+        fields = ('id', 'archived', 'employee_found',)
 
 
 class JobOpeningMoveToArchiveSerializer(serializers.Serializer):
