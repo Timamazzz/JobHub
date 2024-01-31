@@ -3,7 +3,7 @@ from django.utils import timezone
 
 
 class Event(models.Model):
-    title = models.CharField(max_length=255, verbose_name='Заголовок')
+    title = models.CharField(max_length=255, verbose_name='Заголовок', null=True, blank=True)
     publish_time = models.DateTimeField(verbose_name='Время публикации события', default=timezone.now)
     text = models.TextField(verbose_name='Текст')
 
