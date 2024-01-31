@@ -18,7 +18,8 @@ class JobOpeningListSerializer(serializers.ModelSerializer):
     class Meta:
         model = JobOpening
         fields = ('id', 'job_type', 'job_category', 'job_activity', 'title', 'description', 'salary_min', 'salary_max',
-                  'employer_name', 'employer_description', 'employer_address', 'created_at', 'applicants')
+                  'employer_name', 'employer_description', 'employer_address', 'employer_site', 'created_at',
+                  'applicants')
 
 
 class JobOpeningCreateUpdateSerializer(serializers.ModelSerializer):
