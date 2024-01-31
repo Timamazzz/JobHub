@@ -36,13 +36,19 @@ class JobOpeningCreateUpdateSerializer(serializers.ModelSerializer):
 
 
 class JobOpeningFoundApplicantSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = JobOpening
-        fields = ('id', 'employee_found', )
+        fields = ('id', 'employee_found',)
 
 
 class JobOpeningMoveToArchiveSerializer(serializers.Serializer):
+    class Meta:
+        fields = ('id', 'archived',)
+
+
+class JobOpeningListFilterSerializer(serializers.ModelSerializer):
 
     class Meta:
-        fields = ('id', 'archived', )
+        model = JobOpening
+        fields = ('id', 'job_type', 'job_category', 'job_activity', 'title', 'description', 'salary_min', 'salary_max',
+                  'employer', 'created_at', 'applicants', 'archived', 'employee_found')
