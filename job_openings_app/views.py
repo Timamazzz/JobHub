@@ -1,9 +1,11 @@
 from django.shortcuts import render
 from rest_framework import status
 from rest_framework.decorators import action
+from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 
 from JobHub.utils.ModelViewSet import ModelViewSet
+from job_openings_app.filters.job_opening_filters import JobOpeningFilter
 from job_openings_app.models import JobOpening
 from job_openings_app.serializers.job_opening_serializers import JobOpeningSerializer, JobOpeningListSerializer, \
     JobOpeningCreateUpdateSerializer, JobOpeningFoundApplicantSerializer, JobOpeningMoveToArchiveSerializer
@@ -13,6 +15,7 @@ from job_openings_app.serializers.job_opening_serializers import JobOpeningSeria
 class JobOpeningViewSet(ModelViewSet):
     queryset = JobOpening.objects.all()
     serializer_class = JobOpeningSerializer
+    filterset_class = JobOpeningFilter
     serializer_list = {
         'list': JobOpeningListSerializer,
         'create': JobOpeningCreateUpdateSerializer,
@@ -20,6 +23,14 @@ class JobOpeningViewSet(ModelViewSet):
         'found-applicants': JobOpeningFoundApplicantSerializer,
         'move-to-archive': JobOpeningMoveToArchiveSerializer,
     }
+
+    def perform_create(self, serializer):
+        employer = self.request.user.employer
+
+        if employer:
+            serializer.save(employer=employer)
+        else:
+            raise ValidationError("User does not have associated Employer.")
 
     @action(detail=True, methods=['post'], url_path='found-applicants')
     def found_applicants(self, request, pk=None):
