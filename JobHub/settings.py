@@ -184,10 +184,12 @@ AUTH_USER_MODEL = 'users_app.User'
 
 # Email
 EMAIL_BACKEND = 'post_office.EmailBackend'
-EMAIL_HOST = 'smtp.mail.ru'
-EMAIL_PORT = 2525
-EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False
-DEFAULT_FROM_EMAIL = 'timama.feik@mail.ru'
-EMAIL_HOST_USER = 'timama.feik@mail.ru'
-EMAIL_HOST_PASSWORD = 'zTSkMrHhArxtaJz7RiP3'
+DEFAULT_FROM_EMAIL = 'info@bel-mail.ru'
+EMAIL_USE_SSL = True
+EMAIL_USE_TLS = False
+EMAIL_TIMEOUT = 30
+EMAIL_HOST = 'smtps.dashasender.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = '89205731783@mail.ru'
+# EMAIL_HOST_PASSWORD = 'Astra1988!'
+EMAIL_HOST_PASSWORD = 'd0583b8b07be826de4da838a26c60cd5'
