@@ -18,16 +18,16 @@ class PhotoExcursionInline(admin.TabularInline):
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    list_display = ('text', )
-    search_fields = ('text', )
+    list_display = ('title', )
+    search_fields = ('title', 'text', )
     inlines = [PhotoEventInline]
     exclude = ['publish_time']
 
 
 @admin.register(Excursion)
 class ExcursionAdmin(admin.ModelAdmin):
-    list_display = ('excursion_time', 'text')
-    search_fields = ('excursion_time', 'text')
+    list_display = ('title', 'excursion_time', 'text')
+    search_fields = ('excursion_time', 'text', 'title')
     list_filter = ('excursion_time',)
     inlines = [PhotoExcursionInline]
     exclude = ['publish_time']

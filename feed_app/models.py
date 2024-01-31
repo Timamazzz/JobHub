@@ -14,6 +14,7 @@ class Event(models.Model):
 
 
 class Excursion(models.Model):
+    title = models.CharField(max_length=255, verbose_name='Заголовок', null=True, blank=True)
     publish_time = models.DateTimeField(verbose_name='Время публикации экскурсии', default=timezone.now)
     excursion_time = models.DateTimeField(verbose_name='Время экскурсии', default=timezone.now)
     text = models.TextField(verbose_name='Текст')
