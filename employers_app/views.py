@@ -4,18 +4,21 @@ from rest_framework.response import Response
 from post_office import mail
 from JobHub import settings
 from JobHub.utils.ModelViewSet import ModelViewSet
+from employers_app.filters.employer_filters import EmployerFilter
 from employers_app.models import Employer
 from employers_app.serializers.employers_serializers import EmployerSerializer, EmployerModerationDataSerializer, \
-    EmployerLoginSerializer
+    EmployerLoginSerializer, EmployerFilterListSerializer
 
 
 # Create your views here.
 class EmployerViewSet(ModelViewSet):
     queryset = Employer.objects.all()
     serializer_class = EmployerSerializer
+    filterset_class = EmployerFilter
     serializer_list = {
         'send-to-moderation': EmployerModerationDataSerializer,
         'login': EmployerLoginSerializer,
+        'filter-list': EmployerFilterListSerializer
     }
 
     @action(detail=False, methods=['post'], url_path='send-to-moderation')

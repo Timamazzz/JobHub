@@ -26,3 +26,9 @@ class EmployerLoginSerializer(serializers.Serializer):
     class Meta:
         model = Employer
         fields = ('username', 'password')
+
+
+class EmployerFilterListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Employer
+        fields = ('user, ')
