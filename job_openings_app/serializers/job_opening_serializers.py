@@ -50,5 +50,4 @@ class JobOpeningListFilterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = JobOpening
-        fields = ('id', 'job_type', 'job_category', 'job_activity', 'title', 'description', 'salary_min', 'salary_max',
-                  'employer', 'created_at', 'applicants', 'archived', 'employee_found')
+        fields = ('job_type', 'job_category', 'job_activity', 'employer', 'applicants', 'archived', 'employee_found')
