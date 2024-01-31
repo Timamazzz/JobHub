@@ -9,7 +9,7 @@ from employers_app.models import Employer
 from job_openings_app.filters.job_opening_filters import JobOpeningFilter
 from job_openings_app.models import JobOpening
 from job_openings_app.serializers.job_opening_serializers import JobOpeningSerializer, JobOpeningListSerializer, \
-    JobOpeningCreateUpdateSerializer,  JobOpeningListFilterSerializer
+    JobOpeningCreateUpdateSerializer, JobOpeningListFilterSerializer
 
 
 # Create your views here.
@@ -64,23 +64,6 @@ class JobOpeningViewSet(ModelViewSet):
         job_opening.save()
 
         return Response({'detail': 'Job opening moved to archive.'}, status=status.HTTP_200_OK)
-
-    @action(detail=False, methods=['get'], url_path='search')
-    def search(self, request):
-        query = request.query_params.get('query', '')
-
-        results = JobOpening.objects.filter(
-            job_type__name__icontains=query,
-            job_category__name__icontains=query,
-            job_activity__name__icontains=query,
-            title__icontains=query,
-            description__icontains=query,
-            employer__name__icontains=query,
-            employer__legal_address__icontains=query
-        )
-
-        serializer = JobOpeningSerializer(results, many=True)
-        return Response(serializer.data)
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
