@@ -10,9 +10,9 @@ class JobOpeningSerializer(serializers.ModelSerializer):
 
 
 class JobOpeningListSerializer(serializers.ModelSerializer):
-    job_type = serializers.CharField(source='job_type__name')
-    job_category = serializers.CharField(source='job_category__name')
-    job_activity = serializers.CharField(source='job_activity__name')
+    job_type = serializers.CharField(source='job_type.name')
+    job_category = serializers.CharField(source='job_category.name')
+    job_activity = serializers.CharField(source='job_activity.name')
 
     employer_name = serializers.CharField(source='employer.name')
     employer_description = serializers.CharField(source='employer.description')
