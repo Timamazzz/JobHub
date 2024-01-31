@@ -38,6 +38,17 @@ class JobOpeningViewSet(ModelViewSet):
         else:
             raise ValidationError("User does not have associated Employer")
 
+    def perform_update(self, serializer):
+        try:
+            employer = Employer.objects.get(user=self.request.user)
+        except Employer.DoesNotExist:
+            raise ValidationError("User does not have associated Employer")
+
+        if employer:
+            serializer.save(employer=employer)
+        else:
+            raise ValidationError("User does not have associated Employer")
+
     @action(detail=True, methods=['post'], url_path='found-applicants')
     def found_applicants(self, request, pk=None):
         job_opening = self.get_object()
