@@ -8,7 +8,8 @@ from JobHub.utils.ModelViewSet import ModelViewSet
 from job_openings_app.filters.job_opening_filters import JobOpeningFilter
 from job_openings_app.models import JobOpening
 from job_openings_app.serializers.job_opening_serializers import JobOpeningSerializer, JobOpeningListSerializer, \
-    JobOpeningCreateUpdateSerializer, JobOpeningFoundApplicantSerializer, JobOpeningMoveToArchiveSerializer
+    JobOpeningCreateUpdateSerializer, JobOpeningFoundApplicantSerializer, JobOpeningMoveToArchiveSerializer, \
+    JobOpeningListFilterSerializer
 
 
 # Create your views here.
@@ -22,6 +23,7 @@ class JobOpeningViewSet(ModelViewSet):
         'update': JobOpeningCreateUpdateSerializer,
         'found-applicants': JobOpeningFoundApplicantSerializer,
         'move-to-archive': JobOpeningMoveToArchiveSerializer,
+        'filter-list': JobOpeningListFilterSerializer,
     }
 
     def perform_create(self, serializer):
