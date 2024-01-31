@@ -1,7 +1,9 @@
 from django.shortcuts import render
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
+from rest_framework.filters import SearchFilter
 from rest_framework.response import Response
 
 from JobHub.utils.ModelViewSet import ModelViewSet
@@ -17,6 +19,9 @@ class JobOpeningViewSet(ModelViewSet):
     queryset = JobOpening.objects.all()
     serializer_class = JobOpeningSerializer
     filterset_class = JobOpeningFilter
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    search_fields = ['title', 'description', 'job_type__name', 'job_category__name', 'job_activity__name',
+                     'employer__name', 'employer__legal_address']
     serializer_list = {
         'list': JobOpeningListSerializer,
         'create': JobOpeningCreateUpdateSerializer,
@@ -64,6 +69,7 @@ class JobOpeningViewSet(ModelViewSet):
         return Response({'detail': 'Job opening moved to archive.'}, status=status.HTTP_200_OK)
 
     def list(self, request, *args, **kwargs):
+        print('request', request)
         queryset = self.filter_queryset(self.get_queryset())
         query = request.query_params.get('query', '')
 
