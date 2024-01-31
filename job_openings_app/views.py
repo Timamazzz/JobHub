@@ -70,3 +70,26 @@ class JobOpeningViewSet(ModelViewSet):
 
         serializer = JobOpeningSerializer(results, many=True)
         return Response(serializer.data)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        query = request.query_params.get('query', '')
+
+        if query:
+            queryset = queryset.filter(
+                job_type__name__icontains=query,
+                job_category__name__icontains=query,
+                job_activity__name__icontains=query,
+                title__icontains=query,
+                description__icontains=query,
+                employer__name__icontains=query,
+                employer__legal_address__icontains=query
+            )
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
