@@ -13,6 +13,7 @@ class JobOpeningListSerializer(serializers.ModelSerializer):
     employer_name = serializers.CharField(source='employer.name')
     employer_description = serializers.CharField(source='employer.description')
     employer_address = serializers.CharField(source='employer.legal_address')
+    employer_site = serializers.CharField(source='employer.site')
 
     class Meta:
         model = JobOpening
