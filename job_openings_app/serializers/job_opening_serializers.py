@@ -10,6 +10,10 @@ class JobOpeningSerializer(serializers.ModelSerializer):
 
 
 class JobOpeningListSerializer(serializers.ModelSerializer):
+    job_type = serializers.CharField(source='job_type__name')
+    job_category = serializers.CharField(source='job_category__name')
+    job_activity = serializers.CharField(source='job_activity__name')
+
     employer_name = serializers.CharField(source='employer.name')
     employer_description = serializers.CharField(source='employer.description')
     employer_address = serializers.CharField(source='employer.legal_address')
@@ -17,7 +21,7 @@ class JobOpeningListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = JobOpening
-        fields = ('id', 'job_type__name', 'job_category__name', 'job_activity__name', 'title', 'description',
+        fields = ('id', 'job_type', 'job_category', 'job_activity', 'title', 'description',
                   'salary_min', 'salary_max', 'employer_name', 'employer_description', 'employer_address',
                   'employer_site', 'created_at', 'applicants')
 
