@@ -53,3 +53,20 @@ class JobOpeningViewSet(ModelViewSet):
             return Response({'detail': 'Job opening moved to archive.'}, status=status.HTTP_200_OK)
         else:
             return Response({'error': 'Invalid data', 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=['get'], url_path='search')
+    def search(self, request):
+        query = request.query_params.get('query', '')
+
+        results = JobOpening.objects.filter(
+            job_type__name__icontains=query,
+            job_category__name__icontains=query,
+            job_activity__name__icontains=query,
+            title__icontains=query,
+            description__icontains=query,
+            employer__name__icontains=query,
+            employer__legal_address__icontains=query
+        )
+
+        serializer = JobOpeningSerializer(results, many=True)
+        return Response(serializer.data)
