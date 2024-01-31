@@ -21,8 +21,6 @@ class JobOpeningViewSet(ModelViewSet):
         'list': JobOpeningListSerializer,
         'create': JobOpeningCreateUpdateSerializer,
         'update': JobOpeningCreateUpdateSerializer,
-        'found-applicants': {},
-        'move-to-archive': {},
         'filter-list': JobOpeningListFilterSerializer,
     }
 
