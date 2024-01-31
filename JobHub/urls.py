@@ -27,6 +27,7 @@ urlpatterns = [
     path('api/feed/', include('feed_app.urls')),
     path('api/applicants/', include('applicants_app.urls')),
     path('api/employers/', include('employers_app.urls')),
+    path('api/job-openings/', include('job_openings_app.urls')),
     path('upload/', FileUploadView.as_view(), name='file-upload'),
     re_path(r'^media/(?P<path>.*)$', serve,
             {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}),
