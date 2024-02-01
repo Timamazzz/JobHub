@@ -193,28 +193,3 @@ EMAIL_PORT = 465
 EMAIL_HOST_USER = '89205731783@mail.ru'
 # EMAIL_HOST_PASSWORD = 'Astra1988!'
 EMAIL_HOST_PASSWORD = 'd0583b8b07be826de4da838a26c60cd5'
-
-
-AUTHENTICATION_BACKENDS = (
-    'social_core.backends.vk.VKOAuth2',
-    'django.contrib.auth.backends.ModelBackend',
-)
-
-SOCIAL_AUTH_VK_OAUTH2_SCOPE = ["email"]
-SOCIAL_AUTH_VK_OAUTH2_KEY = "51430005"
-SOCIAL_AUTH_VK_OAUTH2_SECRET = "4jzfT9qUCNvBMpafnS9D"
-
-
-SOCIAL_AUTH_PIPELINE = (
-    "social_core.pipeline.social_auth.social_details",
-    "social_core.pipeline.social_auth.social_uid",
-    "social_core.pipeline.social_auth.auth_allowed",
-    "social_core.pipeline.social_auth.social_user",
-    "social_core.pipeline.user.get_username",
-    "social_core.pipeline.user.create_user",
-    "social_core.pipeline.social_auth.associate_user",
-    "social_core.pipeline.social_auth.load_extra_data",
-    "social_core.pipeline.user.user_details",
-)
-
-LOGIN_REDIRECT_URL = "/"
