@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'post_office',
     'corsheaders',
     'django_filters',
-    'social_django',
     'docs_app',
     'users_app',
     'feed_app',
