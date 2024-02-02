@@ -22,7 +22,6 @@ from JobHub import settings
 from JobHub.utils.FileUploadView import FileUploadView
 
 urlpatterns = [
-    (r'^auth/', include('rest_framework_social_oauth2.urls')),
     path('admin/', admin.site.urls),
     path('api/users/', include('users_app.urls')),
     path('api/feed/', include('feed_app.urls')),

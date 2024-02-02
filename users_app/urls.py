@@ -8,6 +8,7 @@ router = DefaultRouter()
 router.register(r'', UserViewSet)
 
 urlpatterns = [
+    path('auth/', include('rest_framework_social_oauth2.urls')),
     path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('', include(router.urls)),
 ]
