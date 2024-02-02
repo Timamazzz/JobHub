@@ -1,5 +1,5 @@
 import social_django
-from django.urls import path, include
+from django.urls import path, include, get_resolver
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenRefreshView
 from users_app.views import UserViewSet
@@ -13,4 +13,6 @@ urlpatterns = [
     path('', include(router.urls)),
 ]
 
-print('social_django.urls', include('social_django.urls'))
+resolver = get_resolver()
+for pattern in resolver.url_patterns:
+    print(pattern)
