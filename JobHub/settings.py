@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'post_office',
     'corsheaders',
     'django_filters',
-
+    'social_django',
     'docs_app',
     'users_app',
     'feed_app',
@@ -157,6 +157,7 @@ REST_FRAMEWORK = {
 }
 
 AUTHENTICATION_BACKENDS = (
+    'social_core.backends.vk.VKOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 # Simple Jwt
@@ -196,3 +197,7 @@ EMAIL_PORT = 465
 EMAIL_HOST_USER = '89205731783@mail.ru'
 # EMAIL_HOST_PASSWORD = 'Astra1988!'
 EMAIL_HOST_PASSWORD = 'd0583b8b07be826de4da838a26c60cd5'
+
+SOCIAL_AUTH_VK_OAUTH2_KEY = '51846722'
+SOCIAL_AUTH_VK_OAUTH2_SECRET = '1HEfeVQlp9rXuYzDPZ88'
+SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
