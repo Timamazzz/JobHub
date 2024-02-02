@@ -39,7 +39,11 @@ class UserViewSet(ModelViewSet):
     @action(detail=False, methods=['GET'], url_path='vk-login/callback')
     def vk_login_callback(self, request):
         try:
+            print('----------------------------------------------------------------')
             print('request', request)
+            print('request attributes:', dir(request))
+            print('request data:', request.__dict__)
+            print('----------------------------------------------------------------')
             strategy = load_strategy(request)
             print('strategy', strategy)
             backend = load_backend(strategy, 'vk-oauth2', redirect_uri=None)
