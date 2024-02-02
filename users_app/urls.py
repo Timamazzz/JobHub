@@ -8,7 +8,7 @@ router = DefaultRouter()
 router.register(r'', UserViewSet)
 
 urlpatterns = [
-    #path('social/', include('social_django.urls')),
+    path('social/', include('social_django.urls', namespace='social')),
     path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('', include(router.urls)),
 ]

@@ -39,6 +39,7 @@ class UserViewSet(ModelViewSet):
     def vk_login_callback(self, request):
         user = request.backend.do_auth(request.GET.get('code'))
 
+        print('user', user)
         if user:
             login(request, user)
 
