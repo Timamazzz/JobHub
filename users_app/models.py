@@ -50,6 +50,8 @@ class User(AbstractUser):
         verbose_name="Роль"
     )
 
+    #vk_login = models.CharField(max_length=255, blank=True, null=True, verbose_name="VK Login")
+
     objects = UserManager()
 
     class Meta:
