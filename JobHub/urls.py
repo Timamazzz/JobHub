@@ -23,7 +23,7 @@ from JobHub.utils.FileUploadView import FileUploadView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/social/', include('social_django.urls')),
+    path('api/social/', include('social_django.urls', namespace='social')),
     path('api/users/', include('users_app.urls')),
     path('api/feed/', include('feed_app.urls')),
     path('api/applicants/', include('applicants_app.urls')),
