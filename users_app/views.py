@@ -10,7 +10,7 @@ from users_app.serializers.user_serializers import UserSerializer, UserRetrieveS
 # Create your views here.
 class VKLoginView(View):
     @psa('social:begin')
-    def post(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         return self.render_json_response({'redirect_url': request.backend.auth_url()})
 
     def render_json_response(self, data, status=200):
