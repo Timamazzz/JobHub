@@ -42,7 +42,11 @@ class UserViewSet(ModelViewSet):
             print('strategy', strategy)
             backend = load_backend(strategy, 'vk-oauth2', redirect_uri=None)
             print('backend', backend)
-            user = backend.complete(strategy, response_data={})
+
+            code = request.query_params.get('code')
+            state = request.query_params.get('state')
+
+            user = backend.complete(strategy, response_data={'code': code, 'state': state})
             print('user', user)
 
             if user:
