@@ -12,3 +12,5 @@ urlpatterns = [
     path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('', include(router.urls)),
 ]
+
+print('social_django.urls', include('social_django.urls'))
