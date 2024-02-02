@@ -34,14 +34,18 @@ class UserViewSet(ModelViewSet):
         return redirect(authorize_url)
 
     @action(detail=False, methods=['GET'], url_path='vk-login/callback')
-    @psa('social:complete', 'social:complete')
     def vk_login_callback(self, request):
-        user = request.backend.do_auth(request.GET.get('code'))
+        backend = request.GET.get('backend')
 
-        print('user', user)
-        if user:
-            login(request, user)
-
-            return Response({'detail': 'VK login successful'}, status=status.HTTP_200_OK)
+        if backend:
+            try:
+                user = request.backend.do_auth(request.GET.get('code'))
+                if user:
+                    login(request, user)
+                    return Response({'detail': 'VK login successful'}, status=status.HTTP_200_OK)
+                else:
+                    return HttpResponseBadRequest('VK login failed')
+            except Exception as e:
+                return HttpResponseBadRequest(f'Error during VK login: {str(e)}')
         else:
-            return HttpResponseBadRequest('VK login failed')
+            return HttpResponseBadRequest('Backend parameter is missing')
