@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'post_office',
     'corsheaders',
     'django_filters',
+
     'oauth2_provider',
     'social_django',
     'rest_framework_social_oauth2',
@@ -164,8 +165,9 @@ REST_FRAMEWORK = {
 }
 
 AUTHENTICATION_BACKENDS = (
-   'rest_framework_social_oauth2.backends.DjangoOAuth2',
-   'django.contrib.auth.backends.ModelBackend',
+    'social_core.backends.vk.VKOAuth2',
+    'rest_framework_social_oauth2.backends.DjangoOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
 )
 # Simple Jwt
 SIMPLE_JWT = {
@@ -207,9 +209,3 @@ EMAIL_HOST_PASSWORD = 'd0583b8b07be826de4da838a26c60cd5'
 
 SOCIAL_AUTH_VK_OAUTH2_KEY = '1HEfeVQlp9rXuYzDPZ88'
 SOCIAL_AUTH_VK_OAUTH2_SECRET = '962b0f88962b0f88962b0f88b7953c11ca9962b962b0f88f39082d2631e4ba010048b56'
-
-AUTHENTICATION_BACKENDS = (
-    'social_core.backends.vk.VKOAuth2',
-    'rest_framework_social_oauth2.backends.DjangoOAuth2',
-    'django.contrib.auth.backends.ModelBackend',
-)
