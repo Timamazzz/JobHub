@@ -10,6 +10,7 @@ from JobHub.settings import SOCIAL_AUTH_VK_OAUTH2_KEY
 from JobHub.utils.ModelViewSet import ModelViewSet
 from users_app.models import User
 from users_app.serializers.user_serializers import UserSerializer, UserRetrieveSerializer
+from social_django.utils import load_backend, load_strategy
 
 
 # Create your views here.
@@ -35,17 +36,15 @@ class UserViewSet(ModelViewSet):
 
     @action(detail=False, methods=['GET'], url_path='vk-login/callback')
     def vk_login_callback(self, request):
-        backend = request.GET.get('backend')
+        try:
+            strategy = load_strategy(request)
+            backend = load_backend(strategy, 'vk-oauth2', redirect_uri=None)
+            user = backend.complete(strategy, response_data={})
 
-        if backend:
-            try:
-                user = request.backend.do_auth(request.GET.get('code'))
-                if user:
-                    login(request, user)
-                    return Response({'detail': 'VK login successful'}, status=status.HTTP_200_OK)
-                else:
-                    return HttpResponseBadRequest('VK login failed')
-            except Exception as e:
-                return HttpResponseBadRequest(f'Error during VK login: {str(e)}')
-        else:
-            return HttpResponseBadRequest('Backend parameter is missing')
+            if user:
+                login(request, user)
+                return Response({'detail': 'VK login successful'}, status=status.HTTP_200_OK)
+            else:
+                return HttpResponseBadRequest('VK login failed')
+        except Exception as e:
+            return HttpResponseBadRequest(f'Error during VK login: {str(e)}')
