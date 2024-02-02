@@ -31,5 +31,5 @@ urlpatterns = [
     path('upload/', FileUploadView.as_view(), name='file-upload'),
     re_path(r'^media/(?P<path>.*)$', serve,
             {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}),
-    path('auth/', include('rest_framework_social_oauth2.urls')),
+    path('authorize/', include('rest_framework_social_oauth2.urls')),
 ]
