@@ -47,6 +47,8 @@ class UserViewSet(ModelViewSet):
 
             code = request.query_params.get('code')
             state = request.query_params.get('state')
+            print('code', code)
+            print('state', state)
 
             user = backend.complete(strategy, response_data={'code': code, 'state': state})
             print('user', user)
