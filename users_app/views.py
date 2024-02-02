@@ -34,7 +34,7 @@ class UserViewSet(ModelViewSet):
         return redirect(authorize_url)
 
     @action(detail=False, methods=['GET'], url_path='vk-login/callback')
-    @psa('api/users/social/complete/vk-oauth2', 'api/users/social/complete/vk-oauth2')
+    @psa('social:complete/vk-oauth2', 'social:complete/vk-oauth2')
     def vk_login_callback(self, request):
         user = request.backend.do_auth(request.GET.get('code'))
 
