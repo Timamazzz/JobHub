@@ -8,8 +8,8 @@ router = DefaultRouter()
 router.register(r'', UserViewSet)
 
 urlpatterns = [
-    path('login/vk/', VKLoginView.as_view(), name='vk-login'),
     path('social/', include('social_django.urls')),
     path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('login/vk/', VKLoginView.as_view(), name='vk-login'),
     path('', include(router.urls)),
 ]
