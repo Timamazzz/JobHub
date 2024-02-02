@@ -183,6 +183,10 @@ CORS_ALLOW_METHODS = [
     'PUT',
 ]
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+]
+
 CORS_ALLOW_CREDENTIALS = True
 
 # User
