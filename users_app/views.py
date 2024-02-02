@@ -27,6 +27,8 @@ class UserViewSet(ModelViewSet):
         print('request.build_absolute_uri("/")[:-1]', request.build_absolute_uri("/")[:-1])
         redirect_uri = F'{request.build_absolute_uri("/")[:-1]}/api/users/vk-login/callback/'
         redirect_uri += f'?backend=vk-oauth2'
+        redirect_uri += f'?state=random_string_here'
+
         scope = ['email']
 
         authorize_url = (f'https://oauth.vk.com/authorize?client_id={SOCIAL_AUTH_VK_OAUTH2_KEY}&'
