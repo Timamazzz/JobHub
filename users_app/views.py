@@ -1,7 +1,6 @@
 from django.contrib.auth import login
-from django.http import JsonResponse, HttpResponseBadRequest
+from django.http import HttpResponseBadRequest
 from django.shortcuts import redirect
-from django.views import View
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -35,7 +34,7 @@ class UserViewSet(ModelViewSet):
         return redirect(authorize_url)
 
     @action(detail=False, methods=['GET'], url_path='vk-login/callback')
-    @psa('social:complete', 'social:complete')
+    @psa('api/users/social/complete/vk-oauth2', 'api/users/social/complete/vk-oauth2')
     def vk_login_callback(self, request):
         user = request.backend.do_auth(request.GET.get('code'))
 
