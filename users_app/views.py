@@ -37,9 +37,13 @@ class UserViewSet(ModelViewSet):
     @action(detail=False, methods=['GET'], url_path='vk-login/callback')
     def vk_login_callback(self, request):
         try:
+            print('request', request)
             strategy = load_strategy(request)
+            print('strategy', strategy)
             backend = load_backend(strategy, 'vk-oauth2', redirect_uri=None)
+            print('backend', backend)
             user = backend.complete(strategy, response_data={})
+            print('user', user)
 
             if user:
                 login(request, user)
@@ -47,4 +51,5 @@ class UserViewSet(ModelViewSet):
             else:
                 return HttpResponseBadRequest('VK login failed')
         except Exception as e:
+            print('error', e)
             return HttpResponseBadRequest(f'Error during VK login: {str(e)}')
