@@ -15,7 +15,6 @@ from datetime import timedelta
 from pathlib import Path
 from dotenv import load_dotenv
 
-
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -84,6 +83,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -154,12 +155,18 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+        'rest_framework_social_oauth2.authentication.SocialAuthentication',
     ),
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 30,
 }
 
+AUTHENTICATION_BACKENDS = (
+   'rest_framework_social_oauth2.backends.DjangoOAuth2',
+   'django.contrib.auth.backends.ModelBackend',
+)
 # Simple Jwt
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(weeks=1),
@@ -197,7 +204,6 @@ EMAIL_PORT = 465
 EMAIL_HOST_USER = '89205731783@mail.ru'
 # EMAIL_HOST_PASSWORD = 'Astra1988!'
 EMAIL_HOST_PASSWORD = 'd0583b8b07be826de4da838a26c60cd5'
-
 
 SOCIAL_AUTH_VK_OAUTH2_KEY = '1HEfeVQlp9rXuYzDPZ88'
 SOCIAL_AUTH_VK_OAUTH2_SECRET = '962b0f88962b0f88962b0f88b7953c11ca9962b962b0f88f39082d2631e4ba010048b56'
