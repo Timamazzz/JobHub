@@ -77,13 +77,17 @@ class UserViewSet(ModelViewSet):
 
         # Проверяем наличие атрибута strategy в объекте Request
         if not hasattr(request, 'strategy'):
-            return HttpResponseBadRequest('No strategy attribute in the request')
+            strategy = load_strategy(request)
+            setattr(request, 'strategy', strategy)
 
-        # Используем strategy для аутентификации
-        user = request.strategy.backend.do_auth(request.strategy, request.strategy.data)
+        try:
+            # Используем strategy для аутентификации
+            user = request.strategy.backend.do_auth(request.strategy, request.strategy.data)
 
-        if user:
-            login(request, user)
-            return Response({'detail': 'VK login successful'})
-        else:
-            return HttpResponseBadRequest('VK login failed')
+            if user:
+                login(request, user)
+                return Response({'detail': 'VK login successful'})
+            else:
+                return HttpResponseBadRequest('VK login failed')
+        except Exception as e:
+            return HttpResponseBadRequest(f'Error during VK login: {str(e)}')
