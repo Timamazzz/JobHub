@@ -1,3 +1,5 @@
+import secrets
+
 from django.contrib.auth import login
 from django.http import HttpResponseBadRequest
 from django.shortcuts import redirect
@@ -21,12 +23,19 @@ class UserViewSet(ModelViewSet):
         'retrieve': UserRetrieveSerializer,
     }
 
+    @staticmethod
+    def generate_random_string(length=32):
+        return secrets.token_urlsafe(length)
+
     @action(detail=False, methods=['GET'], url_path='vk-login')
     def vk_login(self, request):
         print('request.build_absolute_uri("/")[:-1]', request.build_absolute_uri("/")[:-1])
         redirect_uri = F'{request.build_absolute_uri("/")[:-1]}/api/users/vk-login/callback/'
         redirect_uri += f'?backend=vk-oauth2'
-        redirect_uri += f'&state=random_string_here'
+
+        state = self.generate_random_string()
+        request.session['vk_login_state'] = state
+        redirect_uri += f'&state={state}'
 
         scope = ['email']
 
@@ -49,9 +58,13 @@ class UserViewSet(ModelViewSet):
             print('backend', backend)
 
             code = request.query_params.get('code')
-            state = request.query_params.get('state')
             print('code', code)
+
+            state = request.query_params.get('state')
             print('state', state)
+
+            if state != request.session.get('vk_login_state'):
+                return HttpResponseBadRequest('Wrong state parameter given.')
 
             user = backend.complete(strategy, response_data={'code': code, 'state': state})
             print('user', user)
