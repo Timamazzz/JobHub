@@ -63,8 +63,11 @@ class UserViewSet(ModelViewSet):
             state = request.query_params.get('state')
             print('state', state)
 
+            print('if state != state:', state != 'state')
             if state != 'state':
                 return HttpResponseBadRequest('Wrong state parameter given.')
+            else:
+                print('state parameter given.')
 
             user = backend.complete(strategy, response_data={'code': code, 'state': state})
             print('user', user)
