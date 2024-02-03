@@ -74,6 +74,7 @@ class UserViewSet(ModelViewSet):
     @psa('social:complete')
     @action(detail=False, methods=['GET'], url_path='vk-login/callback')
     def vk_login_callback(self, request):
+        print(('hello'))
         user = request.backend.do_auth(request.backend.strategy, request.backend.data)
         if user:
             login(request, user)
