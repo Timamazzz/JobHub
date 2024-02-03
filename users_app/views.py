@@ -71,7 +71,6 @@ class UserViewSet(ModelViewSet):
     def vk_login(self, request):
         return redirect('social:begin', 'vk-oauth2')
 
-    @psa('social:complete', 'vk-oauth2')
     @action(detail=False, methods=['GET'], url_path='vk-login/callback')
     def vk_login_callback(self, request):
         print(('hello'))
