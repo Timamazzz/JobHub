@@ -33,7 +33,7 @@ class UserViewSet(ModelViewSet):
         redirect_uri = F'{request.build_absolute_uri("/")[:-1]}/api/users/vk-login/callback/'
         redirect_uri += f'?backend=vk-oauth2'
 
-        state = self.generate_random_string()
+        state = 'state'
         request.session['vk_login_state'] = state
         redirect_uri += f'&state={state}'
 
@@ -63,7 +63,7 @@ class UserViewSet(ModelViewSet):
             state = request.query_params.get('state')
             print('state', state)
 
-            if state != request.session.get('vk_login_state'):
+            if state != 'state':
                 return HttpResponseBadRequest('Wrong state parameter given.')
 
             user = backend.complete(strategy, response_data={'code': code, 'state': state})
