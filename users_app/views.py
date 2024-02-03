@@ -73,8 +73,15 @@ class UserViewSet(ModelViewSet):
 
     @action(detail=False, methods=['GET'], url_path='vk-login/callback')
     def vk_login_callback(self, request):
-        print(('hello'))
-        user = request.backend.do_auth(request.backend.strategy, request.backend.data)
+        print('hello')
+
+        # Проверяем наличие атрибута strategy в объекте Request
+        if not hasattr(request, 'strategy'):
+            return HttpResponseBadRequest('No strategy attribute in the request')
+
+        # Используем strategy для аутентификации
+        user = request.strategy.backend.do_auth(request.strategy, request.strategy.data)
+
         if user:
             login(request, user)
             return Response({'detail': 'VK login successful'})
