@@ -82,7 +82,7 @@ class UserViewSet(ModelViewSet):
 
         try:
             # Используем strategy для аутентификации
-            user = request.strategy.backend.do_auth(request.strategy, request.strategy.data)
+            user = request.strategy.authenticate()
 
             if user:
                 login(request, user)
