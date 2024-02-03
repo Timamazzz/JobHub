@@ -4,7 +4,6 @@ from django.shortcuts import redirect
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from social_django.utils import psa
 
 from JobHub.settings import SOCIAL_AUTH_VK_OAUTH2_KEY
 from JobHub.utils.ModelViewSet import ModelViewSet
@@ -46,7 +45,7 @@ class UserViewSet(ModelViewSet):
             print('----------------------------------------------------------------')
             strategy = load_strategy(request)
             print('strategy', strategy)
-            backend = load_backend(strategy, 'vk-oauth2', redirect_uri=None)
+            backend = load_backend(strategy, 'vk-oauth2', redirect_uri=f'http://rabota.belregion.ru/')
             print('backend', backend)
 
             code = request.query_params.get('code')
