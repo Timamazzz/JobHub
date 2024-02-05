@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login as auth_login
 from django.db import transaction
 from django.http import HttpResponse
 from django.shortcuts import redirect
+from django.urls import reverse
 from rest_framework import status
 from rest_framework.decorators import action
 from JobHub.settings import SOCIAL_AUTH_VK_OAUTH2_KEY, SOCIAL_AUTH_VK_OAUTH2_SECRET
@@ -28,11 +29,11 @@ class UserViewSet(ModelViewSet):
 
     @action(detail=False, methods=['GET'], url_path='vk-login')
     def vk_login(self, request):
-        return redirect(
-            'https://oauth.vk.com/authorize?client_id=51846722&redirect_uri=http://51.250.126.124:8099/'
-            'api/users/vk-login/callback&display=page&scope=email&scope=photos&scope=phone_number')
+        redirect_uri = request.build_absolute_uri(reverse('vk-callback'))
+        return redirect(f'https://oauth.vk.com/authorize?client_id=51846722&redirect_uri={redirect_uri}'
+                        f'&display=page&scope=email&scope=photos&scope=phone_number')
 
-    @action(detail=False, methods=['GET'], url_path='vk-login/callback')
+    @action(detail=False, methods=['GET'], url_path='vk-login/callback', name='vk-callback')
     def vk_login_callback(self, request):
         code = request.GET.get('code')
         if not code:
@@ -41,7 +42,7 @@ class UserViewSet(ModelViewSet):
         response = requests.get('https://oauth.vk.com/access_token', params={
             'client_id': SOCIAL_AUTH_VK_OAUTH2_KEY,
             'client_secret': SOCIAL_AUTH_VK_OAUTH2_SECRET,
-            'redirect_uri': 'http://51.250.126.124:8099/api/users/vk-login/callback',
+            'redirect_uri': request.build_absolute_uri(reverse('vk-callback')),
             'code': code
         })
 
@@ -50,7 +51,6 @@ class UserViewSet(ModelViewSet):
 
         vk_user_id = data.get('user_id')
 
-        # Используйте vk_api для получения информации о пользователе
         vk_session = vk_api.VkApi(token=access_token)
         vk = vk_session.get_api()
         user_info = vk.users.get(user_ids=vk_user_id, fields='first_name,last_name,bdate,contacts,domain,has_photo, '
@@ -87,14 +87,9 @@ class UserViewSet(ModelViewSet):
                 }
             )
 
-        print('user', user)
-
         if user is not None:
             refresh = RefreshToken.for_user(user)
-            print('refresh token', refresh)
             access_token = refresh.access_token
-
-            print('access token', access_token)
 
             if created:
                 return redirect(f'/profile?access_token={access_token}&refresh_token={refresh}')
