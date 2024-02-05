@@ -1,12 +1,9 @@
-import secrets
 from datetime import datetime
 import requests
 import vk_api
-from django.contrib.auth import authenticate, login as auth_login
 from django.db import transaction
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect
-from django.urls import reverse
 from rest_framework import status
 from rest_framework.decorators import action
 from JobHub.settings import SOCIAL_AUTH_VK_OAUTH2_KEY, SOCIAL_AUTH_VK_OAUTH2_SECRET
@@ -31,7 +28,11 @@ class UserViewSet(ModelViewSet):
     def vk_login(self, request):
         my_domain = request.build_absolute_uri('/')[:-1]
         redirect_uri = f'{my_domain}/api/users/vk-login/callback'
-        vk_auth_url = f'https://oauth.vk.com/authorize?client_id=51846722&redirect_uri={redirect_uri}&display=page'
+
+        scopes = ['phone_number', ]
+        scope_param = ','.join(scopes)
+
+        vk_auth_url = f'https://oauth.vk.com/authorize?client_id=51846722&redirect_uri={redirect_uri}&display=page&scope={scope_param}'
 
         response_data = {'vk_auth_url': vk_auth_url}
         return JsonResponse(response_data, status=status.HTTP_200_OK)
@@ -53,6 +54,7 @@ class UserViewSet(ModelViewSet):
         })
 
         data = response.json()
+        print('data', data)
         access_token = data.get('access_token')
 
         vk_user_id = data.get('user_id')
