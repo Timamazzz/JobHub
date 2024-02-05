@@ -98,19 +98,18 @@ class UserViewSet(ModelViewSet):
 
             if created and photo:
                 avatar_file_data = save_uploaded_files([photo])
-
-                with transaction.atomic():
-                    for file_data in avatar_file_data:
-                        try:
-                            applicant_avatar = ApplicantAvatar.objects.create(
-                                applicant=applicant_profile,
-                                file=file_data.url,
-                                original_name=file_data['original_name'],
-                                extension=file_data['extension']
-                            )
-                        except Exception as e:
-                            print(f"Error saving file: {e}")
-                            return HttpResponseServerError("Internal Server Error")
+                for file_data in avatar_file_data:
+                    try:
+                        applicant_avatar = ApplicantAvatar.objects.create(
+                            applicant=applicant_profile,
+                            file=file_data.url,
+                            original_name=file_data['original_name'],
+                            extension=file_data['extension']
+                        )
+                        print(applicant_avatar)
+                    except Exception as e:
+                        print(f"Error saving file: {e}")
+                        return HttpResponseServerError("Internal Server Error")
 
         if user is not None:
             refresh = RefreshToken.for_user(user)
