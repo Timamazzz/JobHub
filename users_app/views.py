@@ -70,8 +70,19 @@ class UserViewSet(ModelViewSet):
         has_photo = user_info[0].get('has_photo')
         photo = user_info[0].get('photo_100')
 
+        print('first_name', first_name)
+        print('last_name', last_name)
+        print('birth_date', birth_date)
+        print('phone_number', phone_number)
+        print('domain', domain)
+        print('has_photo', has_photo)
+        print('photo', photo)
+
         email = data.get('email') if data.get('email') is not None else f'{vk_user_id}@mail.com'
         applicant_email = data.get('email') if data.get('email') is not None else None
+
+        print('email', email)
+        print('applicant_email', applicant_email)
 
         with transaction.atomic():
             user, created = User.objects.get_or_create(
