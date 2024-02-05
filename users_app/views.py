@@ -12,7 +12,7 @@ from applicants_app.models import Applicant
 from users_app.enums import UserRoleEnum
 from users_app.models import User
 from users_app.serializers.user_serializers import UserSerializer, UserRetrieveSerializer
-
+from rest_framework_simplejwt.tokens import RefreshToken
 
 # Create your views here.
 
@@ -107,7 +107,7 @@ class UserViewSet(ModelViewSet):
         photo = user_info[0].get('photo_100')
 
         email = data.get('email') if data.get('email') is not None else f'{vk_user_id}@mail.com'
-        applicant_email = email if email is not None else None
+        applicant_email = data.get('email') if data.get('email') is not None else None
 
         print('user_info:', user_info)
 
@@ -136,7 +136,12 @@ class UserViewSet(ModelViewSet):
         if authenticated_user is not None:
             auth_login(request, authenticated_user)
 
-        if created:
-            return redirect('/profile')
-        else:
-            return redirect('/')
+            refresh = str(RefreshToken.for_user(authenticated_user))
+            access_token = str(refresh.access_token),
+
+            if created:
+                return redirect(
+                    f'/profile?access_token={access_token}&refresh_token={refresh}')
+            else:
+                return redirect(
+                    f'/access_token={access_token}&refresh_token={refresh}')
