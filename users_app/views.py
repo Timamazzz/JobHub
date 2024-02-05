@@ -70,6 +70,7 @@ class UserViewSet(ModelViewSet):
         has_photo = user_info[0].get('has_photo')
         photo = user_info[0].get('photo_100')
 
+        print('user_info', user_info)
         print('first_name', first_name)
         print('last_name', last_name)
         print('birth_date', birth_date)
