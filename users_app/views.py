@@ -130,6 +130,7 @@ class UserViewSet(ModelViewSet):
                 }
             )
 
+        print('user', user)
         authenticated_user = authenticate(request, username=domain, password=None)
         print('authenticated_user', authenticated_user)
 
