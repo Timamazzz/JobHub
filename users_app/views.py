@@ -140,10 +140,10 @@ class UserViewSet(ModelViewSet):
 
             print('refresh token', refresh)
             print('access token', access_token)
+
             if created:
-                return redirect(
-                    f'/profile?access_token={access_token}&refresh_token={refresh}')
+                return redirect(f'/profile?access_token={access_token}&refresh_token={refresh}')
             else:
-                return redirect(f'/access_token={access_token}&refresh_token={refresh}')
+                return redirect(f'/?access_token={access_token}&refresh_token={refresh}')
 
         return HttpResponse({}, status=status.HTTP_200_OK)
