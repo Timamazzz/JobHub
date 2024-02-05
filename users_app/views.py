@@ -1,14 +1,11 @@
 import secrets
 from datetime import datetime
-
-import jwt
 import requests
 import vk_api
-from django.contrib.auth import login
+from django.contrib.auth import login as auth_login
 from django.db import transaction
 from django.shortcuts import redirect
 from rest_framework.decorators import action
-
 from JobHub.settings import SOCIAL_AUTH_VK_OAUTH2_KEY, SOCIAL_AUTH_VK_OAUTH2_SECRET
 from JobHub.utils.ModelViewSet import ModelViewSet
 from applicants_app.models import Applicant
@@ -134,9 +131,7 @@ class UserViewSet(ModelViewSet):
                 }
             )
 
-        print('applicant_profile:', applicant_profile)
-        log = login(request, applicant_profile.user)
-        print('login:', log)
+        log = auth_login(request, user)
 
         if created:
             return redirect('/profile')
