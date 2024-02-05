@@ -89,6 +89,7 @@ class UserViewSet(ModelViewSet):
         })
 
         data = response.json()
+        print('data:', data)
         access_token = data.get('access_token')
 
         vk_user_id = data.get('user_id')
