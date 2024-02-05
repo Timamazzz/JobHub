@@ -131,6 +131,7 @@ class UserViewSet(ModelViewSet):
             )
 
         authenticated_user = authenticate(request, username=domain, password=None)
+        print('authenticated_user', authenticated_user)
 
         if authenticated_user is not None:
             auth_login(request, authenticated_user)
