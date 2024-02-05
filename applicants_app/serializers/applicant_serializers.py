@@ -1,6 +1,8 @@
 from rest_framework import serializers
 
 from applicants_app.models import Applicant
+from docs_app.serializers.ApplicantAvatarSerializer import ApplicantCreateAvatarSerializer, \
+    ApplicantRetrieveAvatarSerializer
 
 
 class ApplicantSerializer(serializers.ModelSerializer):
@@ -10,9 +12,11 @@ class ApplicantSerializer(serializers.ModelSerializer):
 
 
 class ApplicantRetrieveSerializer(serializers.ModelSerializer):
+    avatar = ApplicantRetrieveAvatarSerializer(many=False, read_only=True)
+
     class Meta:
         model = Applicant
-        fields = ('fio', 'birth_date', 'phone_number', 'email', 'resume')
+        fields = ('avatar', 'fio', 'birth_date', 'phone_number', 'email', 'resume')
 
 
 class ApplicantCreateSerializer(serializers.ModelSerializer):
@@ -22,6 +26,8 @@ class ApplicantCreateSerializer(serializers.ModelSerializer):
 
 
 class ApplicantUpdateSerializer(serializers.ModelSerializer):
+    avatar = ApplicantCreateAvatarSerializer(many=False)
+
     class Meta:
         model = Applicant
-        fields = ('fio', 'birth_date', 'phone_number', 'email', 'resume')
+        fields = ('avatar', 'fio', 'birth_date', 'phone_number', 'email', 'resume')
