@@ -101,8 +101,8 @@ class UserViewSet(ModelViewSet):
         first_name = user_info[0]['first_name']
         last_name = user_info[0]['last_name']
         birth_date = datetime.strptime(user_info[0].get('bdate'), '%d.%m.%Y').strftime('%Y-%m-%d')
-        phone_number = user_info[0].get('contacts', {}).get('mobile_phone')
-        email = user_info[0].get('contacts', {}).get('email')
+        phone_number = user_info[0].get('mobile_phone')
+        email = user_info[0].get('email')
 
         print('user_info:', user_info)
 
