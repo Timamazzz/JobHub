@@ -81,9 +81,10 @@ class UserViewSet(ModelViewSet):
         response = requests.get('https://oauth.vk.com/access_token', params={
             'client_id': SOCIAL_AUTH_VK_OAUTH2_KEY,
             'client_secret': SOCIAL_AUTH_VK_OAUTH2_SECRET,
-            'redirect_uri': 'http://51.250.126.124:8099/api/users/vk-login/callback&display=page',
+            'redirect_uri': 'http://51.250.126.124:8099/api/users/vk-login/callback',
             'code': code
         })
+
         data = response.json()
         access_token = data.get('access_token')
         print('data:', data)
