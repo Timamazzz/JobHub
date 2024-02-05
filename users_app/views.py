@@ -102,7 +102,7 @@ class UserViewSet(ModelViewSet):
                     try:
                         applicant_avatar = ApplicantAvatar.objects.create(
                             applicant=applicant_profile,
-                            file=file_data.url,
+                            file=file_data['url'],
                             original_name=file_data['original_name'],
                             extension=file_data['extension']
                         )
