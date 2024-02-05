@@ -107,8 +107,8 @@ class UserViewSet(ModelViewSet):
         with transaction.atomic():
             user, created = User.objects.get_or_create(
                 username=f'{vk_user_id}',
+                email=email,
                 defaults={
-                    'email': email,
                     'role': UserRoleEnum.APPLICANT.name,
                 }
             )
