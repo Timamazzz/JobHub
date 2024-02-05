@@ -3,18 +3,14 @@ import secrets
 import requests
 import vk_api
 from django.contrib.auth import login
-from django.http import HttpResponseBadRequest
 from django.shortcuts import redirect
-from rest_framework import status
 from rest_framework.decorators import action
-from rest_framework.response import Response
 
 from JobHub.settings import SOCIAL_AUTH_VK_OAUTH2_KEY, SOCIAL_AUTH_VK_OAUTH2_SECRET
 from JobHub.utils.ModelViewSet import ModelViewSet
 from applicants_app.models import Applicant
 from users_app.models import User
 from users_app.serializers.user_serializers import UserSerializer, UserRetrieveSerializer
-from social_django.utils import load_backend, load_strategy, psa
 
 
 # Create your views here.
@@ -85,7 +81,6 @@ class UserViewSet(ModelViewSet):
         response = requests.get('https://oauth.vk.com/access_token', params={
             'client_id': SOCIAL_AUTH_VK_OAUTH2_KEY,
             'client_secret': SOCIAL_AUTH_VK_OAUTH2_SECRET,
-            'redirect_uri': 'http://51.250.126.124:8099/',
             'code': code
         })
         data = response.json()
