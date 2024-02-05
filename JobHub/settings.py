@@ -46,7 +46,9 @@ INSTALLED_APPS = [
     'post_office',
     'corsheaders',
     'django_filters',
+    'oauth2_provider',
     'social_django',
+    'drf_social_oauth2',
     'docs_app',
     'users_app',
     'feed_app',
@@ -152,6 +154,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+        'drf_social_oauth2.authentication.SocialAuthentication',
     ),
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
@@ -161,6 +165,7 @@ REST_FRAMEWORK = {
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.vk.VKOAuth2',
     'django.contrib.auth.backends.ModelBackend',
+    'drf_social_oauth2.backends.DjangoOAuth2',
 )
 # Simple Jwt
 SIMPLE_JWT = {
