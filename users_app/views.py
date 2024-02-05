@@ -1,14 +1,17 @@
 from datetime import datetime
 import requests
 import vk_api
+from django.core.files import File
 from django.db import transaction
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect
 from rest_framework import status
 from rest_framework.decorators import action
 from JobHub.settings import SOCIAL_AUTH_VK_OAUTH2_KEY, SOCIAL_AUTH_VK_OAUTH2_SECRET
+from JobHub.utils.FileUploadView import save_uploaded_files
 from JobHub.utils.ModelViewSet import ModelViewSet
 from applicants_app.models import Applicant
+from docs_app.models import ApplicantAvatar
 from users_app.enums import UserRoleEnum
 from users_app.models import User
 from users_app.serializers.user_serializers import UserSerializer, UserRetrieveSerializer
@@ -54,38 +57,23 @@ class UserViewSet(ModelViewSet):
         })
 
         data = response.json()
-        print('data', data)
         access_token = data.get('access_token')
 
         vk_user_id = data.get('user_id')
 
         vk_session = vk_api.VkApi(token=access_token)
         vk = vk_session.get_api()
-        user_info = vk.users.get(user_ids=vk_user_id, fields='first_name,last_name,bdate,contacts,domain,has_photo, '
-                                                             'photo_100')
+        user_info = vk.users.get(user_ids=vk_user_id, fields='first_name,last_name,bdate,contacts,domain,photo')
 
         first_name = user_info[0]['first_name']
         last_name = user_info[0]['last_name']
         birth_date = datetime.strptime(user_info[0].get('bdate'), '%d.%m.%Y').strftime('%Y-%m-%d')
         phone_number = user_info[0].get('mobile_phone')
         domain = user_info[0].get('domain')
-        has_photo = user_info[0].get('has_photo')
-        photo = user_info[0].get('photo_100')
-
-        print('user_info', user_info)
-        print('first_name', first_name)
-        print('last_name', last_name)
-        print('birth_date', birth_date)
-        print('phone_number', phone_number)
-        print('domain', domain)
-        print('has_photo', has_photo)
-        print('photo', photo)
+        photo = user_info[0].get('photo')
 
         email = data.get('email') if data.get('email') is not None else f'{vk_user_id}@mail.com'
         applicant_email = data.get('email') if data.get('email') is not None else None
-
-        print('email', email)
-        print('applicant_email', applicant_email)
 
         with transaction.atomic():
             user, created = User.objects.get_or_create(
@@ -106,6 +94,19 @@ class UserViewSet(ModelViewSet):
                     'email': applicant_email,
                 }
             )
+
+            print('photo', photo)
+            if created and photo:
+                avatar_file_data = save_uploaded_files([photo])
+
+                with transaction.atomic():
+                    for file_data in avatar_file_data:
+                        applicant_avatar = ApplicantAvatar.objects.create(
+                            applicant=applicant_profile,
+                            file=File(open(file_data['url'], 'rb')),
+                            original_name=file_data['original_name'],
+                            extension=file_data['extension']
+                        )
 
         if user is not None:
             refresh = RefreshToken.for_user(user)

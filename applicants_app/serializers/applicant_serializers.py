@@ -24,4 +24,4 @@ class ApplicantCreateSerializer(serializers.ModelSerializer):
 class ApplicantUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Applicant
-        ffields = ('fio', 'birth_date', 'phone_number', 'email', 'resume')
+        fields = ('fio', 'birth_date', 'phone_number', 'email', 'resume')
