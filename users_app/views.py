@@ -102,17 +102,12 @@ class UserViewSet(ModelViewSet):
                 with transaction.atomic():
                     for file_data in avatar_file_data:
                         try:
-                            with NamedTemporaryFile(delete=True) as tmp_file:
-                                response = requests.get(file_data['url'])
-                                tmp_file.write(response.content)
-                                tmp_file.flush()
-
-                                applicant_avatar = ApplicantAvatar.objects.create(
-                                    applicant=applicant_profile,
-                                    file=File(tmp_file, name=file_data['original_name']),
-                                    original_name=file_data['original_name'],
-                                    extension=file_data['extension']
-                                )
+                            applicant_avatar = ApplicantAvatar.objects.create(
+                                applicant=applicant_profile,
+                                file=file_data.url,
+                                original_name=file_data['original_name'],
+                                extension=file_data['extension']
+                            )
                         except Exception as e:
                             print(f"Error saving file: {e}")
                             return HttpResponseServerError("Internal Server Error")
