@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from JobHub.utils.fields import PhoneField
 from applicants_app.models import Applicant
 from docs_app.serializers.ApplicantAvatarSerializer import ApplicantCreateAvatarSerializer, \
     ApplicantRetrieveAvatarSerializer
@@ -27,6 +28,7 @@ class ApplicantCreateSerializer(serializers.ModelSerializer):
 
 class ApplicantUpdateSerializer(serializers.ModelSerializer):
     avatar = ApplicantCreateAvatarSerializer(many=False)
+    phone_number = PhoneField()
 
     class Meta:
         model = Applicant
