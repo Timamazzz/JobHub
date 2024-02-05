@@ -50,6 +50,7 @@ def save_uploaded_files(uploaded_files, path='uploads/'):
                 print(f"Error saving file: {e}")
                 return HttpResponseServerError("Internal Server Error")
 
+        url = url.replace("media/", "")
         file_data = {
             'url': url,
             'original_name': original_name,
