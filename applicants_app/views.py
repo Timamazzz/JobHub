@@ -29,6 +29,6 @@ class ApplicantViewSet(ModelViewSet):
     @action(detail=False, methods=['GET'], url_path='get-by-user')
     def get_by_user(self, request):
         user = request.user
-        queryset = Applicant.objects.filter(user=user)
-        serializer = self.get_serializer(queryset, many=True)
+        queryset = Applicant.objects.filter(user=user).first()
+        serializer = self.get_serializer(queryset, many=False)
         return Response(serializer.data, status=status.HTTP_200_OK)
