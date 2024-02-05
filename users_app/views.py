@@ -131,13 +131,11 @@ class UserViewSet(ModelViewSet):
             )
 
         print('user', user)
-        authenticated_user = authenticate(request, username=domain, password=None)
-        print('authenticated_user', authenticated_user)
 
-        if authenticated_user is not None:
-            auth_login(request, authenticated_user)
+        if user is not None:
+            auth_login(request, user)
 
-            refresh = str(RefreshToken.for_user(authenticated_user))
+            refresh = str(RefreshToken.for_user(user))
             access_token = str(refresh.access_token),
 
             print('refresh token', refresh)
