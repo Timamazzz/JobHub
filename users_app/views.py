@@ -134,10 +134,9 @@ class UserViewSet(ModelViewSet):
         print('user', user)
 
         if user is not None:
-            refresh = str(RefreshToken.for_user(user))
-            print('refresh token', RefreshToken.for_user(user))
+            refresh = RefreshToken.for_user(user)
             print('refresh token', refresh)
-            access_token = str(refresh.access_token),
+            access_token = refresh.access_token
 
             print('access token', access_token)
 
