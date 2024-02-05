@@ -73,7 +73,7 @@ class UserViewSet(ModelViewSet):
     def vk_login(self, request):
         return redirect(
             'https://oauth.vk.com/authorize?client_id=51846722&redirect_uri=http://51.250.126.124:8099/'
-            'api/users/vk-login/callback&display=page')
+            'api/users/vk-login/callback&display=page&scope=photos,email,phone_number')
 
     @action(detail=False, methods=['GET'], url_path='vk-login/callback')
     def vk_login_callback(self, request):
