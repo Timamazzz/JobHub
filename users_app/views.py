@@ -96,7 +96,7 @@ class UserViewSet(ModelViewSet):
         # Используйте vk_api для получения информации о пользователе
         vk_session = vk_api.VkApi(token=access_token)
         vk = vk_session.get_api()
-        user_info = vk.users.get(user_ids=vk_user_id, fields='first_name,last_name,bdate,email,phone_number')
+        user_info = vk.users.get(user_ids=vk_user_id, fields='first_name,last_name,bdate,contacts')
 
         first_name = user_info[0]['first_name']
         last_name = user_info[0]['last_name']
