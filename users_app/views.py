@@ -93,24 +93,24 @@ class UserViewSet(ModelViewSet):
         print('data:', data)
         access_token = data.get('access_token')
 
-        token_info = jwt.decode(access_token, algorithms=['HS256'], verify=False)
-        print('Token info:', token_info)
-
         vk_user_id = data.get('user_id')
 
         # Используйте vk_api для получения информации о пользователе
         vk_session = vk_api.VkApi(token=access_token)
         vk = vk_session.get_api()
-        user_info = vk.users.get(user_ids=vk_user_id, fields='first_name,last_name,bdate,contacts,domain,has_photo, photo_100')
+        user_info = vk.users.get(user_ids=vk_user_id, fields='first_name,last_name,bdate,contacts,domain,has_photo, '
+                                                             'photo_100')
 
         first_name = user_info[0]['first_name']
         last_name = user_info[0]['last_name']
         birth_date = datetime.strptime(user_info[0].get('bdate'), '%d.%m.%Y').strftime('%Y-%m-%d')
         phone_number = user_info[0].get('mobile_phone')
-        email = user_info[0].get('email')
         domain = user_info[0].get('domain')
         has_photo = user_info[0].get('has_photo')
         photo = user_info[0].get('photo_100')
+
+        email = data.get('email') if data.get('email') is not None else f'{vk_user_id}@mail.com'
+        applicant_email = email if email is not None else None
 
         print('user_info:', user_info)
 
@@ -130,7 +130,7 @@ class UserViewSet(ModelViewSet):
                     'fio': f'{first_name} {last_name}',
                     'birth_date': birth_date,
                     'phone_number': phone_number,
-                    'email': email,
+                    'email': applicant_email,
                 }
             )
 
