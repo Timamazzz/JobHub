@@ -100,7 +100,7 @@ class UserViewSet(ModelViewSet):
 
         first_name = user_info[0]['first_name']
         last_name = user_info[0]['last_name']
-        birth_date = datetime.strptime(user_info[0].get('bdate'), '%Y-%m-%dT%H:%M').strftime('%Y-%m-%d')
+        birth_date = datetime.strptime(user_info[0].get('bdate'), '%d.%m.%Y').strftime('%Y-%m-%d')
         phone_number = user_info[0].get('contacts', {}).get('mobile_phone')
         email = user_info[0].get('contacts', {}).get('email')
 
@@ -108,7 +108,7 @@ class UserViewSet(ModelViewSet):
             user, created = User.objects.get_or_create(
                 username=f'{vk_user_id}',
                 defaults={
-                    'email': email,  # взять из вк
+                    'email': email,
                     'role': UserRoleEnum.APPLICANT.name,
                 }
             )
