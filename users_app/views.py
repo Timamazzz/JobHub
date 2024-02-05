@@ -32,11 +32,8 @@ class UserViewSet(ModelViewSet):
         my_domain = request.build_absolute_uri('/')[:-1]
         redirect_uri = f'{my_domain}/api/users/vk-login/callback'
 
-        scopes = ['email']
-        scope_param = ','.join(scopes)
-
         return redirect(f'https://oauth.vk.com/authorize?client_id=51846722&redirect_uri={redirect_uri}'
-                        f'&display=page&scope={scope_param}')
+                        f'&display=page&scope=email')
 
     @action(detail=False, methods=['GET'], url_path='vk-login/callback', name='vk-login-callback')
     def vk_login_callback(self, request):
