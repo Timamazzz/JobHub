@@ -9,7 +9,19 @@ class ApplicantSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class CreateSerializer(serializers.ModelSerializer):
+class ApplicantRetrieveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Applicant
+        fields = ('fio', 'birth_date', 'phone_number', 'email', 'resume')
+
+
+class ApplicantCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Applicant
         fields = '__all__'
+
+
+class ApplicantUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Applicant
+        fields = ('fio', 'birth_date', 'phone_number', 'email', 'resume')
