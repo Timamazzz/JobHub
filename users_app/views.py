@@ -133,8 +133,6 @@ class UserViewSet(ModelViewSet):
         print('user', user)
 
         if user is not None:
-            auth_login(request, user)
-
             refresh = str(RefreshToken.for_user(user))
             access_token = str(refresh.access_token),
 
