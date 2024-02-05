@@ -1,4 +1,8 @@
 from uuid import uuid4
+
+import requests
+from django.core.files.base import ContentFile
+from django.http import HttpResponseServerError
 from rest_framework import serializers
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -17,11 +21,19 @@ def save_uploaded_files(uploaded_files, path='uploads/'):
     result_data = []
 
     for uploaded_file in uploaded_files:
-        print('uploaded_file', uploaded_file)
         if hasattr(uploaded_file, 'url') or bool(urlparse(uploaded_file.url).scheme) or uploaded_file.startswith('http'):
-            url = uploaded_file.url
-            original_name = os.path.basename(urlparse(url).path)
-            extension = os.path.splitext(original_name)[-1].lower()
+            response = requests.get(uploaded_file)
+            if response.status_code == 200:
+                content_type = response.headers.get('content-type')
+                extension = content_type.split('/')[-1] if content_type else ''
+                new_name = f"{uuid4().hex}_{datetime.now().strftime('%Y%m%d%H%M%S')}.{extension}"
+
+                try:
+                    path = default_storage.save(os.path.join(path, new_name), ContentFile(response.content))
+                    url = default_storage.url(path)
+                except Exception as e:
+                    print(f"Error saving file: {e}")
+                    return HttpResponseServerError("Internal Server Error")
         else:
             original_name = uploaded_file.name
             extension = os.path.splitext(original_name)[-1].lower()

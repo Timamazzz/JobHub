@@ -95,7 +95,6 @@ class UserViewSet(ModelViewSet):
                 }
             )
 
-            print('photo', photo)
             if created and photo:
                 avatar_file_data = save_uploaded_files([photo])
 
