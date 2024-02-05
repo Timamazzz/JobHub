@@ -1,5 +1,7 @@
 import secrets
 
+import requests
+import vk_api
 from django.contrib.auth import login
 from django.http import HttpResponseBadRequest
 from django.shortcuts import redirect
@@ -7,8 +9,9 @@ from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from JobHub.settings import SOCIAL_AUTH_VK_OAUTH2_KEY
+from JobHub.settings import SOCIAL_AUTH_VK_OAUTH2_KEY, SOCIAL_AUTH_VK_OAUTH2_SECRET
 from JobHub.utils.ModelViewSet import ModelViewSet
+from applicants_app.models import Applicant
 from users_app.models import User
 from users_app.serializers.user_serializers import UserSerializer, UserRetrieveSerializer
 from social_django.utils import load_backend, load_strategy, psa
@@ -69,25 +72,50 @@ class UserViewSet(ModelViewSet):
 
     @action(detail=False, methods=['GET'], url_path='vk-login')
     def vk_login(self, request):
-        return redirect('social:begin', 'vk-oauth2')
+        return redirect(
+            'https://oauth.vk.com/authorize?client_id=51846722&redirect_uri=http://51.250.126.124:8099/'
+            'api/users/vk-login/callback&display=page')
 
     @action(detail=False, methods=['GET'], url_path='vk-login/callback')
     def vk_login_callback(self, request):
-        print('hello')
+        code = request.GET.get('code')
+        if not code:
+            return redirect('path_to_error_page')
 
-        # Проверяем наличие атрибута strategy в объекте Request
-        if not hasattr(request, 'strategy'):
-            strategy = load_strategy(request)
-            setattr(request, 'strategy', strategy)
+        response = requests.get('https://oauth.vk.com/access_token', params={
+            'client_id': SOCIAL_AUTH_VK_OAUTH2_KEY,
+            'client_secret': SOCIAL_AUTH_VK_OAUTH2_SECRET,
+            'redirect_uri': 'http://51.250.126.124:8099/',
+            'code': code
+        })
+        data = response.json()
+        access_token = data.get('access_token')
+        print('data:', data)
 
-        try:
-            # Используем strategy для аутентификации
-            user = request.strategy.authenticate()
+        vk_user_id = data.get('user_id')
 
-            if user:
-                login(request, user)
-                return Response({'detail': 'VK login successful'})
-            else:
-                return HttpResponseBadRequest('VK login failed')
-        except Exception as e:
-            return HttpResponseBadRequest(f'Error during VK login: {str(e)}')
+        # Используйте vk_api для получения информации о пользователе
+        vk_session = vk_api.VkApi(token=access_token)
+        vk = vk_session.get_api()
+        user_info = vk.users.get(user_ids=vk_user_id, fields='first_name,last_name,bdate')
+
+        first_name = user_info[0]['first_name']
+        last_name = user_info[0]['last_name']
+        birth_date = user_info[0].get('bdate')
+
+        applicant_profile, created = Applicant.objects.get_or_create(
+            vk_id=vk_user_id,
+            defaults={
+                'fio': f'{first_name} {last_name}',
+                'birth_date': birth_date,
+            }
+        )
+
+        print('applicant_profile:', applicant_profile)
+        log = login(request, applicant_profile.user)
+        print('login:', log)
+
+        if created:
+            return redirect('/profile')
+        else:
+            return redirect('/')

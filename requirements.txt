@@ -39,5 +39,6 @@ sqlparse==0.4.4
 tinycss2==1.2.1
 tzdata==2023.4
 urllib3==2.2.0
+vk-api==11.9.9
 webencodings==0.5.1
 wrapt==1.16.0

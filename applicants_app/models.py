@@ -33,3 +33,11 @@ class Applicant(models.Model):
         blank=True, null=True,
         verbose_name="Резюме"
     )
+
+    vk_id = models.CharField(
+        max_length=50,
+        unique=True,
+        blank=True,
+        null=True,
+        verbose_name="ID ВКонтакте"
+    )
