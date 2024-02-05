@@ -1,4 +1,5 @@
 import secrets
+from datetime import datetime
 
 import requests
 import vk_api
@@ -99,6 +100,8 @@ class UserViewSet(ModelViewSet):
         first_name = user_info[0]['first_name']
         last_name = user_info[0]['last_name']
         birth_date = user_info[0].get('bdate')
+
+        birth_date = datetime.strptime(birth_date, "%d.%m.%Y").strftime("%Y-%m-%d")
 
         applicant_profile, created = Applicant.objects.get_or_create(
             vk_id=vk_user_id,
