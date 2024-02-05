@@ -17,6 +17,7 @@ def save_uploaded_files(uploaded_files, path='uploads/'):
     result_data = []
 
     for uploaded_file in uploaded_files:
+        print('uploaded_file', uploaded_file)
         if hasattr(uploaded_file, 'url') and bool(urlparse(uploaded_file.url).scheme) and uploaded_file.startswith('http'):
             url = uploaded_file.url
             original_name = os.path.basename(urlparse(url).path)
