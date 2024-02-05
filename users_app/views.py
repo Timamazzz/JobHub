@@ -64,14 +64,14 @@ class UserViewSet(ModelViewSet):
 
         vk_session = vk_api.VkApi(token=access_token)
         vk = vk_session.get_api()
-        user_info = vk.users.get(user_ids=vk_user_id, fields='first_name,last_name,bdate,contacts,domain,photo')
+        user_info = vk.users.get(user_ids=vk_user_id, fields='first_name,last_name,bdate,contacts,domain,photo_200')
 
         first_name = user_info[0]['first_name']
         last_name = user_info[0]['last_name']
         birth_date = datetime.strptime(user_info[0].get('bdate'), '%d.%m.%Y').strftime('%Y-%m-%d')
         phone_number = user_info[0].get('mobile_phone')
         domain = user_info[0].get('domain')
-        photo = user_info[0].get('photo')
+        photo = user_info[0].get('photo_200')
 
         email = data.get('email') if data.get('email') is not None else f'{vk_user_id}@mail.com'
         applicant_email = data.get('email') if data.get('email') is not None else None
