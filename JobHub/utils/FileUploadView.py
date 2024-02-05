@@ -21,6 +21,10 @@ def save_uploaded_files(uploaded_files, path='uploads/'):
     result_data = []
 
     for uploaded_file in uploaded_files:
+        original_name = None
+        extension = None
+        url = None
+
         if hasattr(uploaded_file, 'url') or uploaded_file.startswith('http'):
             response = requests.get(uploaded_file)
             if response.status_code == 200:
@@ -39,8 +43,12 @@ def save_uploaded_files(uploaded_files, path='uploads/'):
             extension = os.path.splitext(original_name)[-1].lower()
             new_name = f"{uuid4().hex}_{datetime.now().strftime('%Y%m%d%H%M%S')}{extension}"
 
-            path = default_storage.save(os.path.join(path, new_name), uploaded_file)
-            url = default_storage.url(path)
+            try:
+                path = default_storage.save(os.path.join(path, new_name), uploaded_file)
+                url = default_storage.url(path)
+            except Exception as e:
+                print(f"Error saving file: {e}")
+                return HttpResponseServerError("Internal Server Error")
 
         file_data = {
             'url': url,
