@@ -2,7 +2,7 @@ import secrets
 from datetime import datetime
 import requests
 import vk_api
-from django.contrib.auth import login as auth_login
+from django.contrib.auth import authenticate, login as auth_login
 from django.db import transaction
 from django.shortcuts import redirect
 from rest_framework.decorators import action
@@ -131,7 +131,10 @@ class UserViewSet(ModelViewSet):
                 }
             )
 
-        log = auth_login(request, user)
+        authenticated_user = authenticate(request, username=domain, password=None)
+
+        if authenticated_user is not None:
+            auth_login(request, authenticated_user)
 
         if created:
             return redirect('/profile')
