@@ -104,6 +104,8 @@ class UserViewSet(ModelViewSet):
         phone_number = user_info[0].get('contacts', {}).get('mobile_phone')
         email = user_info[0].get('contacts', {}).get('email')
 
+        print('user_info:', user_info)
+
         with transaction.atomic():
             user, created = User.objects.get_or_create(
                 username=f'{vk_user_id}',
