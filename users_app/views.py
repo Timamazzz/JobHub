@@ -11,6 +11,7 @@ from rest_framework.decorators import action
 from JobHub.settings import SOCIAL_AUTH_VK_OAUTH2_KEY, SOCIAL_AUTH_VK_OAUTH2_SECRET
 from JobHub.utils.FileUploadView import save_uploaded_files
 from JobHub.utils.ModelViewSet import ModelViewSet
+from JobHub.utils.fields import formate_phone
 from applicants_app.models import Applicant
 from docs_app.models import ApplicantAvatar
 from users_app.enums import UserRoleEnum
@@ -69,7 +70,7 @@ class UserViewSet(ModelViewSet):
         first_name = user_info[0]['first_name']
         last_name = user_info[0]['last_name']
         birth_date = datetime.strptime(user_info[0].get('bdate'), '%d.%m.%Y').strftime('%Y-%m-%d')
-        phone_number = user_info[0].get('mobile_phone')
+        phone_number = formate_phone(user_info[0].get('mobile_phone'))
         domain = user_info[0].get('domain')
         photo = user_info[0].get('photo_200')
 
