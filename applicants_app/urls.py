@@ -9,3 +9,9 @@ router.register(r'', ApplicantViewSet)
 urlpatterns = [
     path('', include(router.urls)),
 ]
+
+routes = router.get_routes(ApplicantViewSet)
+action_list = []
+for route in routes:
+    action_list += list(route.mapping.values())
+distinct_action_list = set(action_list)
