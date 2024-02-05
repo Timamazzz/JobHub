@@ -29,11 +29,11 @@ class UserViewSet(ModelViewSet):
 
     @action(detail=False, methods=['GET'], url_path='vk-login')
     def vk_login(self, request):
-        redirect_uri = request.build_absolute_uri(reverse('vk-callback'))
+        redirect_uri = request.build_absolute_uri(reverse('vk-login-callback'))
         return redirect(f'https://oauth.vk.com/authorize?client_id=51846722&redirect_uri={redirect_uri}'
                         f'&display=page&scope=email&scope=photos&scope=phone_number')
 
-    @action(detail=False, methods=['GET'], url_path='vk-login/callback', name='vk-callback')
+    @action(detail=False, methods=['GET'], url_path='vk-login/callback', name='vk-login-callback')
     def vk_login_callback(self, request):
         code = request.GET.get('code')
         if not code:
