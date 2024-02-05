@@ -27,7 +27,7 @@ class Applicant(models.Model):
         verbose_name="Номер телефона"
     )
 
-    email = models.EmailField(unique=True, blank=False, null=False, verbose_name="Email")
+    email = models.EmailField(unique=True, blank=True, null=True, verbose_name="Email")
 
     resume = models.TextField(
         blank=True, null=True,
