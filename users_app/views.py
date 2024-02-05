@@ -42,7 +42,7 @@ class UserViewSet(ModelViewSet):
         response = requests.get('https://oauth.vk.com/access_token', params={
             'client_id': SOCIAL_AUTH_VK_OAUTH2_KEY,
             'client_secret': SOCIAL_AUTH_VK_OAUTH2_SECRET,
-            'redirect_uri': request.build_absolute_uri(reverse('vk-callback')),
+            'redirect_uri': request.build_absolute_uri(reverse('vk-login-callback')),
             'code': code
         })
 
