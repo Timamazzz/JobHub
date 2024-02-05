@@ -89,7 +89,6 @@ class UserViewSet(ModelViewSet):
         })
 
         data = response.json()
-        print('data:', data)
         access_token = data.get('access_token')
 
         vk_user_id = data.get('user_id')
@@ -110,8 +109,6 @@ class UserViewSet(ModelViewSet):
 
         email = data.get('email') if data.get('email') is not None else f'{vk_user_id}@mail.com'
         applicant_email = data.get('email') if data.get('email') is not None else None
-
-        print('user_info:', user_info)
 
         with transaction.atomic():
             user, created = User.objects.get_or_create(
@@ -141,11 +138,12 @@ class UserViewSet(ModelViewSet):
             refresh = str(RefreshToken.for_user(authenticated_user))
             access_token = str(refresh.access_token),
 
+            print('refresh token', refresh)
+            print('access token', access_token)
             if created:
                 return redirect(
                     f'/profile?access_token={access_token}&refresh_token={refresh}')
             else:
-                return redirect(
-                    f'/access_token={access_token}&refresh_token={refresh}')
+                return redirect(f'/access_token={access_token}&refresh_token={refresh}')
 
         return HttpResponse({}, status=status.HTTP_200_OK)
