@@ -29,9 +29,12 @@ class UserViewSet(ModelViewSet):
 
     @action(detail=False, methods=['GET'], url_path='vk-login')
     def vk_login(self, request):
-        redirect_uri = request.build_absolute_uri(reverse('vk-login-callback'))
+        my_domain = request.build_absolute_uri('/')[:-1]
+        redirect_uri = f'{my_domain}/api/users/vk-login/callback'
+        scopes = ['email', 'photos', 'phone_number']
+        scope_param = ','.join(scopes)
         return redirect(f'https://oauth.vk.com/authorize?client_id=51846722&redirect_uri={redirect_uri}'
-                        f'&display=page&scope=email&scope=photos&scope=phone_number')
+                        f'&display=page&scope={scope_param}')
 
     @action(detail=False, methods=['GET'], url_path='vk-login/callback', name='vk-login-callback')
     def vk_login_callback(self, request):
@@ -39,10 +42,13 @@ class UserViewSet(ModelViewSet):
         if not code:
             return redirect('path_to_error_page')
 
+        my_domain = request.build_absolute_uri('/')[:-1]
+        redirect_uri = f'{my_domain}/api/users/vk-login/callback'
+
         response = requests.get('https://oauth.vk.com/access_token', params={
             'client_id': SOCIAL_AUTH_VK_OAUTH2_KEY,
             'client_secret': SOCIAL_AUTH_VK_OAUTH2_SECRET,
-            'redirect_uri': request.build_absolute_uri(reverse('vk-login-callback')),
+            'redirect_uri': redirect_uri,
             'code': code
         })
 
