@@ -16,6 +16,7 @@ from users_app.models import User
 from users_app.serializers.user_serializers import UserSerializer, UserRetrieveSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 
+
 # Create your views here.
 
 class UserViewSet(ModelViewSet):
@@ -134,9 +135,10 @@ class UserViewSet(ModelViewSet):
 
         if user is not None:
             refresh = str(RefreshToken.for_user(user))
+            print('refresh token', RefreshToken.for_user(user))
+            print('refresh token', refresh)
             access_token = str(refresh.access_token),
 
-            print('refresh token', refresh)
             print('access token', access_token)
 
             if created:
