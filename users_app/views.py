@@ -31,17 +31,19 @@ class UserViewSet(ModelViewSet):
     def vk_login(self, request):
         my_domain = request.build_absolute_uri('/')[:-1]
         redirect_uri = f'{my_domain}/api/users/vk-login/callback'
-        scopes = ['email', 'photos', 'phone_number']
-        scope_param = ','.join(scopes)
+
+        # scopes = ['email', 'photos', 'phone_number']
+        # scope_param = ','.join(scopes)
+
         return redirect(f'https://oauth.vk.com/authorize?client_id=51846722&redirect_uri={redirect_uri}'
-                        f'&display=page&scope={scope_param}')
+                        f'&display=page&scope=')
 
     @action(detail=False, methods=['GET'], url_path='vk-login/callback', name='vk-login-callback')
     def vk_login_callback(self, request):
         print('request: {}'.format(request))
         code = request.GET.get('code')
         if not code:
-            return redirect('path_to_error_page')
+            return HttpResponse
 
         my_domain = request.build_absolute_uri('/')[:-1]
         redirect_uri = f'{my_domain}/api/users/vk-login/callback'
