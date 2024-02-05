@@ -4,7 +4,9 @@ import requests
 import vk_api
 from django.contrib.auth import authenticate, login as auth_login
 from django.db import transaction
+from django.http import HttpResponse
 from django.shortcuts import redirect
+from rest_framework import status
 from rest_framework.decorators import action
 from JobHub.settings import SOCIAL_AUTH_VK_OAUTH2_KEY, SOCIAL_AUTH_VK_OAUTH2_SECRET
 from JobHub.utils.ModelViewSet import ModelViewSet
@@ -145,3 +147,5 @@ class UserViewSet(ModelViewSet):
             else:
                 return redirect(
                     f'/access_token={access_token}&refresh_token={refresh}')
+
+        return HttpResponse({}, status=status.HTTP_200_OK)
