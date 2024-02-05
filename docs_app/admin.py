@@ -17,5 +17,5 @@ from docs_app.models import *
 
 @admin.register(ApplicantAvatar)
 class ApplicantAvatarAdmin(admin.ModelAdmin):
-    list_display = ('original_name', 'excursion', 'upload_time', 'is_preview')
-    search_fields = ('original_name', 'excursion__text')
+    list_display = ('original_name', 'applicant', 'upload_time', 'is_preview')
+    search_fields = ('original_name', )
