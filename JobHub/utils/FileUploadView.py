@@ -21,7 +21,7 @@ def save_uploaded_files(uploaded_files, path='uploads/'):
     result_data = []
 
     for uploaded_file in uploaded_files:
-        if hasattr(uploaded_file, 'url') or bool(urlparse(uploaded_file.url).scheme) or uploaded_file.startswith('http'):
+        if hasattr(uploaded_file, 'url') or uploaded_file.startswith('http'):
             response = requests.get(uploaded_file)
             if response.status_code == 200:
                 content_type = response.headers.get('content-type')
