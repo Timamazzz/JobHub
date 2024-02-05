@@ -18,7 +18,7 @@ def save_uploaded_files(uploaded_files, path='uploads/'):
 
     for uploaded_file in uploaded_files:
         print('uploaded_file', uploaded_file)
-        if hasattr(uploaded_file, 'url') and bool(urlparse(uploaded_file.url).scheme) and uploaded_file.startswith('http'):
+        if hasattr(uploaded_file, 'url') or bool(urlparse(uploaded_file.url).scheme) or uploaded_file.startswith('http'):
             url = uploaded_file.url
             original_name = os.path.basename(urlparse(url).path)
             extension = os.path.splitext(original_name)[-1].lower()
