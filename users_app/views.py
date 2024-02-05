@@ -4,12 +4,14 @@ from datetime import datetime
 import requests
 import vk_api
 from django.contrib.auth import login
+from django.db import transaction
 from django.shortcuts import redirect
 from rest_framework.decorators import action
 
 from JobHub.settings import SOCIAL_AUTH_VK_OAUTH2_KEY, SOCIAL_AUTH_VK_OAUTH2_SECRET
 from JobHub.utils.ModelViewSet import ModelViewSet
 from applicants_app.models import Applicant
+from users_app.enums import UserRoleEnum
 from users_app.models import User
 from users_app.serializers.user_serializers import UserSerializer, UserRetrieveSerializer
 
@@ -88,7 +90,6 @@ class UserViewSet(ModelViewSet):
 
         data = response.json()
         access_token = data.get('access_token')
-        print('data:', data)
 
         vk_user_id = data.get('user_id')
 
@@ -99,17 +100,29 @@ class UserViewSet(ModelViewSet):
 
         first_name = user_info[0]['first_name']
         last_name = user_info[0]['last_name']
-        birth_date = user_info[0].get('bdate')
+        birth_date = datetime.strptime(user_info[0].get('bdate'), '%Y-%m-%dT%H:%M').strftime('%Y-%m-%d')
+        phone_number = user_info[0].get('contacts', {}).get('mobile_phone')
+        email = user_info[0].get('contacts', {}).get('email')
 
-        birth_date = datetime.strptime(birth_date, "%d.%m.%Y").strftime("%Y-%m-%d")
+        with transaction.atomic():
+            user, created = User.objects.get_or_create(
+                username=f'{vk_user_id}',
+                defaults={
+                    'email': email,  # взять из вк
+                    'role': UserRoleEnum.APPLICANT.name,
+                }
+            )
 
-        applicant_profile, created = Applicant.objects.get_or_create(
-            vk_id=vk_user_id,
-            defaults={
-                'fio': f'{first_name} {last_name}',
-                'birth_date': birth_date,
-            }
-        )
+            applicant_profile, created = Applicant.objects.get_or_create(
+                user=user,
+                vk_id=vk_user_id,
+                defaults={
+                    'fio': f'{first_name} {last_name}',
+                    'birth_date': birth_date,
+                    'phone_number': phone_number,
+                    'email': email,
+                }
+            )
 
         print('applicant_profile:', applicant_profile)
         log = login(request, applicant_profile.user)
