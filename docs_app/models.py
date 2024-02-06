@@ -39,7 +39,6 @@ class ExcursionImage(models.Model):
 
 
 class ApplicantAvatar(models.Model):
-    applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE, verbose_name='Соискатель')
     file = models.FileField(upload_to='avatars/', verbose_name='Файл')
     original_name = models.CharField(max_length=255, verbose_name='Оригинальное имя')
     upload_time = models.DateTimeField(auto_now_add=True, verbose_name='Время загрузки')
