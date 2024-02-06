@@ -8,7 +8,7 @@ from users_app.models import User, PhoneNumberValidator
 class Applicant(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='applicant_profile')
 
-    avatar = models.OneToOneField(ApplicantAvatar, on_delete=models.CASCADE, related_name='applicant',
+    avatar = models.OneToOneField(ApplicantAvatar, on_delete=models.SET_NULL, related_name='applicant',
                                   verbose_name='Аватар', null=True)
 
     fio = models.CharField(

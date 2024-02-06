@@ -17,17 +17,6 @@ class ApplicantRetrieveAvatarSerializer(serializers.ModelSerializer):
 class ApplicantCreateAvatarSerializer(serializers.ModelSerializer):
     class Meta:
         model = ApplicantAvatar
-        fields = ('id', 'file', 'original_name', 'extension')
+        fields = ('file', 'original_name', 'extension')
 
-    def create(self, validated_data):
-        print('ApplicantCreateAvatarSerializer create')
-        return ApplicantAvatar.objects.create(**validated_data)
-
-    def update(self, instance, validated_data):
-        print('ApplicantCreateAvatarSerializer update')
-        instance.file = validated_data.get('file', instance.file)
-        instance.original_name = validated_data.get('original_name', instance.original_name)
-        instance.extension = validated_data.get('extension', instance.extension)
-        instance.save()
-        return instance
 
