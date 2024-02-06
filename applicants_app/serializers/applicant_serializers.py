@@ -34,3 +34,17 @@ class ApplicantUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Applicant
         fields = ('avatar', 'fio', 'birth_date', 'phone_number', 'email', 'resume')
+
+
+class ApplicantForJobOpeningsListSerializer(serializers.ModelSerializer):
+    avatar_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Applicant
+        fields = ('id', 'avatar_url')
+
+    def get_avatar_url(self, obj):
+        try:
+            return obj.avatar.file.url
+        except AttributeError:
+            return None
