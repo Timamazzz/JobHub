@@ -30,6 +30,6 @@ class ApplicantViewSet(ModelViewSet):
     @action(detail=False, methods=['GET'], url_path='get-by-user')
     def get_by_user(self, request):
         user = request.user
-        applicant = user.applicant
+        applicant = user.applicant_profile
         serializer = ApplicantRetrieveSerializer(applicant)
         return Response(serializer.data, status=status.HTTP_200_OK)
