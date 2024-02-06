@@ -9,7 +9,9 @@ from rest_framework.response import Response
 from JobHub.utils.ModelViewSet import ModelViewSet
 from employers_app.models import Employer
 from job_openings_app.filters.job_opening_filters import JobOpeningFilter
-from job_openings_app.models import JobOpening
+from job_openings_app.models import JobOpening, JobCategory, JobActivity
+from job_openings_app.serializers.job_activity_serializers import JobActivitySerializer, JobActivityListSerializer
+from job_openings_app.serializers.job_category_serializers import JobCategorySerializer, JobCategoryListSerializer
 from job_openings_app.serializers.job_opening_serializers import JobOpeningSerializer, JobOpeningListSerializer, \
     JobOpeningCreateUpdateSerializer, JobOpeningListFilterSerializer
 
@@ -100,3 +102,19 @@ class JobOpeningViewSet(ModelViewSet):
         job_opening.applicants.append(applicant)
         job_opening.save()
         return Response(JobOpeningListSerializer(data=job_opening).data)
+
+
+class JobCategoryViewSet(ModelViewSet):
+    queryset = JobCategory.objects.all()
+    serializer_class = JobCategorySerializer
+    serializer_list = {
+        'list': JobCategoryListSerializer,
+    }
+
+
+class JobActivityViewSet(ModelViewSet):
+    queryset = JobActivity.objects.all()
+    serializer_class = JobActivitySerializer
+    serializer_list = {
+        'list': JobActivityListSerializer,
+    }
