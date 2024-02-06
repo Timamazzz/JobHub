@@ -102,7 +102,7 @@ class JobOpeningViewSet(ModelViewSet):
     def respond(self, request, *args, **kwargs):
         job_opening = self.get_object()
         user = request.user
-        applicant = user.applicant
+        applicant = user.applicant_profile
         job_opening.applicants.append(applicant)
         job_opening.save()
         return Response(JobOpeningListSerializer(data=job_opening).data)
