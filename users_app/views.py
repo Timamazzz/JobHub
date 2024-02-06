@@ -102,11 +102,14 @@ class UserViewSet(ModelViewSet):
                 for file_data in avatar_file_data:
                     try:
                         applicant_avatar = ApplicantAvatar.objects.create(
-                            applicant=applicant_profile,
                             file=file_data['url'],
                             original_name=file_data['original_name'],
                             extension=file_data['extension']
                         )
+
+                        applicant_profile.avatar = applicant_avatar
+                        applicant_profile.save()
+
                     except Exception as e:
                         return HttpResponseServerError("Internal Server Error")
 
