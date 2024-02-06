@@ -7,7 +7,7 @@ class IsApplicant(permissions.BasePermission):
         if request.method == 'OPTIONS':
             return True
 
-        return request.user and request.user.is_authenticated and request.user.role == UserRoleEnum.APPLICANT.value
+        return request.user and request.user.is_authenticated and request.user.role == UserRoleEnum.APPLICANT.name
 
 
 class IsEmployer(permissions.BasePermission):
@@ -15,5 +15,5 @@ class IsEmployer(permissions.BasePermission):
         if request.method == 'OPTIONS':
             return True
 
-        return request.user and request.user.is_authenticated and request.user.role == UserRoleEnum.EMPLOYER.value
+        return request.user and request.user.is_authenticated and request.user.role == UserRoleEnum.EMPLOYER.name
 
