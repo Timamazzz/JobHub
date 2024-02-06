@@ -24,7 +24,7 @@ class EmployerViewSet(ModelViewSet):
     }
 
     @action(detail=False, methods=['post'], url_path='send-to-moderation')
-    @permission_classes([permissions.AllowAny,])
+    @permission_classes((permissions.AllowAny, ))
     def send_to_moderation(self, request):
         serializer = EmployerModerationDataSerializer(data=request.data)
         if serializer.is_valid():

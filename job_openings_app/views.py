@@ -1,7 +1,6 @@
-from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, permissions
-from rest_framework.decorators import action, permission_classes
+from rest_framework.decorators import action, permission_classes as view_permission_classes
 from rest_framework.exceptions import ValidationError
 from rest_framework.filters import SearchFilter
 from rest_framework.response import Response
@@ -66,7 +65,7 @@ class JobOpeningViewSet(ModelViewSet):
         return Response({'detail': 'Applicants found for the job opening.'}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['post'], url_path='move-to-archive')
-    @permission_classes([IsEmployer])
+    @view_permission_classes((IsEmployer, ))
     def move_to_archive(self, request, pk=None):
         job_opening = self.get_object()
         job_opening.archived = True
