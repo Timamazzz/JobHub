@@ -14,15 +14,7 @@ class ApplicantSerializer(serializers.ModelSerializer):
 
 
 class ApplicantRetrieveSerializer(serializers.ModelSerializer):
-    avatar = serializers.SerializerMethodField()
-
-    def get_avatar(self, applicant):
-        try:
-            avatar = ApplicantAvatar.objects.get(applicant=applicant)
-            avatar_url = avatar.file.url
-        except ApplicantAvatar.DoesNotExist:
-            avatar_url = None
-        return avatar_url
+    avatar = ApplicantRetrieveAvatarSerializer()
 
     class Meta:
         model = Applicant
@@ -36,7 +28,7 @@ class ApplicantCreateSerializer(serializers.ModelSerializer):
 
 
 class ApplicantUpdateSerializer(serializers.ModelSerializer):
-    avatar = ApplicantCreateAvatarSerializer(many=False)
+    avatar = ApplicantCreateAvatarSerializer()
     phone_number = PhoneField()
 
     class Meta:
