@@ -56,7 +56,7 @@ class JobOpeningViewSet(ModelViewSet):
             raise ValidationError("User does not have associated Employer")
 
     @action(detail=True, methods=['post'], url_path='found-applicants')
-    @action_permission_classes((IsEmployer, ))
+    @action_permission_classes((IsEmployer,))
     def found_applicants(self, request, pk=None):
         job_opening = self.get_object()
         job_opening.archived = True
@@ -66,7 +66,7 @@ class JobOpeningViewSet(ModelViewSet):
         return Response({'detail': 'Applicants found for the job opening.'}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['post'], url_path='move-to-archive')
-    @action_permission_classes((IsEmployer, ))
+    @action_permission_classes((IsEmployer,))
     def move_to_archive(self, request, pk=None):
         job_opening = self.get_object()
         job_opening.archived = True
@@ -98,7 +98,7 @@ class JobOpeningViewSet(ModelViewSet):
         return Response(serializer.data)
 
     @action(detail=True, methods=['post'])
-    @action_permission_classes((IsApplicant, ))
+    @action_permission_classes((IsApplicant,))
     def respond(self, request, *args, **kwargs):
         job_opening = self.get_object()
 
@@ -106,10 +106,12 @@ class JobOpeningViewSet(ModelViewSet):
         applicant = user.applicant_profile
 
         if job_opening.applicants.filter(id=applicant.id).exists():
-            job_opening.applicants.add(applicant)
-            job_opening.save()
+            return Response({"message": "Вы уже откликнулись на эту вакансию."}, status=status.HTTP_400_BAD_REQUEST)
 
-            return Response({"message": "Молодец!"}, status=status.HTTP_200_OK)
+        job_opening.applicants.add(applicant)
+        job_opening.save()
+
+        return Response({"message": "Вы успешно откликнулись на эту вакансию."}, status=status.HTTP_200_OK)
 
 
 class JobCategoryViewSet(ModelViewSet):
