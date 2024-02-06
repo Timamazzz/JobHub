@@ -105,10 +105,11 @@ class JobOpeningViewSet(ModelViewSet):
         user = request.user
         applicant = user.applicant_profile
 
-        job_opening.applicants.add(applicant)
-        job_opening.save()
+        if applicant not in job_opening.applicants:
+            job_opening.applicants.add(applicant)
+            job_opening.save()
 
-        return Response({"message": "Молодец!"}, status=status.HTTP_200_OK)
+            return Response({"message": "Молодец!"}, status=status.HTTP_200_OK)
 
 
 class JobCategoryViewSet(ModelViewSet):
