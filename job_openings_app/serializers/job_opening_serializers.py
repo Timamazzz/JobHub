@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from applicants_app.serializers.applicant_serializers import ApplicantSerializer
+from applicants_app.serializers.applicant_serializers import ApplicantSerializer, ApplicantForJobOpeningsListSerializer
 from job_openings_app.models import JobOpening
 
 
@@ -20,7 +20,7 @@ class JobOpeningListSerializer(serializers.ModelSerializer):
     employer_address = serializers.CharField(source='employer.legal_address')
     employer_site = serializers.CharField(source='employer.site')
 
-    applicants = ApplicantSerializer(many=True, read_only=True)
+    applicants = ApplicantForJobOpeningsListSerializer(many=True, read_only=True)
 
     class Meta:
         model = JobOpening
