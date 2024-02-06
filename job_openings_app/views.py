@@ -100,13 +100,14 @@ class JobOpeningViewSet(ModelViewSet):
     @action(detail=True, methods=['post'])
     @action_permission_classes((IsApplicant, ))
     def respond(self, request, *args, **kwargs):
+
         job_opening = self.get_object()
         user = request.user
         applicant = user.applicant_profile
         job_opening.applicants.add(applicant)
         job_opening.save()
 
-        serializer = JobOpeningListSerializer(data=job_opening)
+        serializer = JobOpeningListSerializer(job_opening)
 
         if serializer.is_valid():
             Response(serializer.data, status=status.HTTP_200_OK)
