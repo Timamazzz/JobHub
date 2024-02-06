@@ -13,6 +13,7 @@ class EventViewSet(ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    pagination_class = None
     serializer_list = {
         'list': EventListSerializer,
         'retrieve': EventRetrieveSerializer,
@@ -23,6 +24,7 @@ class ExcursionViewSet(ModelViewSet):
     queryset = Excursion.objects.all()
     serializer_class = ExcursionSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    pagination_class = None
     serializer_list = {
         'list': ExcursionListSerializer,
         'retrieve': ExcursionRetrieveSerializer,
@@ -33,6 +35,7 @@ class UsefulResourceViewSet(ModelViewSet):
     queryset = UsefulResource.objects.all()
     serializer_class = UsefulResourceSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    pagination_class = None
     serializer_list = {
         'list': UsefulResourceListSerializer,
     }
