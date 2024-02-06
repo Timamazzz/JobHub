@@ -32,8 +32,30 @@ class ApplicantCreateSerializer(serializers.ModelSerializer):
 
 
 class ApplicantUpdateSerializer(serializers.ModelSerializer):
+    avatar = ApplicantCreateAvatarSerializer(required=False)
     phone_number = PhoneField()
 
+    def create(self, validated_data):
+        avatar_data = validated_data.pop('avatar', None)  # Получаем данные о аватаре, если они есть
+        applicant = super().create(validated_data)  # Создаем аппликанта
+
+        if avatar_data:  # Если данные о аватаре есть
+            ApplicantAvatar.objects.create(applicant=applicant, **avatar_data)  # Создаем новый аватар
+
+        return applicant
+
+    def update(self, instance, validated_data):
+        avatar_data = validated_data.pop('avatar', None)  # Получаем данные о аватаре, если они есть
+        if avatar_data:  # Если данные о аватаре есть
+            avatar_instance = instance.avatar  # Получаем существующий аватар, если он есть
+            if avatar_instance:  # Если аватар существует, обновляем его
+                avatar_serializer = ApplicantCreateAvatarSerializer(instance=avatar_instance, data=avatar_data)
+                if avatar_serializer.is_valid():
+                    avatar_serializer.save()
+            else:  # Если аватар не существует, создаем новый
+                ApplicantAvatar.objects.create(applicant=instance, **avatar_data)
+
+        return super().update(instance, validated_data)
 
     class Meta:
         model = Applicant

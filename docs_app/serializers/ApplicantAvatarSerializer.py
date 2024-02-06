@@ -8,7 +8,7 @@ class ApplicantRetrieveAvatarSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ApplicantAvatar
-        fields = ('file', 'original_name', 'upload_time', 'extension')
+        fields = ('id', 'file', 'original_name', 'upload_time', 'extension')
 
     def get_file(self, obj):
         return obj.file.url
