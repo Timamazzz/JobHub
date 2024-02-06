@@ -91,10 +91,10 @@ class JobOpeningViewSet(ModelViewSet):
 
         page = self.paginate_queryset(queryset)
         if page is not None:
-            serializer = self.get_serializer(page, many=True)
+            serializer = JobOpeningListSerializer(page, many=True)
             return self.get_paginated_response(serializer.data)
 
-        serializer = self.get_serializer(queryset, many=True)
+        serializer = JobOpeningListSerializer(queryset, many=True)
         return Response(serializer.data)
 
     @action(detail=True, methods=['post'])
