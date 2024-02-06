@@ -26,7 +26,7 @@ class ApplicantRetrieveSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Applicant
-        fields = ('avatar', 'fio', 'birth_date', 'phone_number', 'email', 'resume')
+        fields = ('id', 'avatar', 'fio', 'birth_date', 'phone_number', 'email', 'resume')
 
 
 class ApplicantCreateSerializer(serializers.ModelSerializer):
