@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import status
-from rest_framework.decorators import action
+from rest_framework import status, permissions
+from rest_framework.decorators import action, permission_classes
 from rest_framework.exceptions import ValidationError
 from rest_framework.filters import SearchFilter
 from rest_framework.response import Response
@@ -69,7 +69,6 @@ class JobOpeningViewSet(ModelViewSet):
         return Response({'detail': 'Job opening moved to archive.'}, status=status.HTTP_200_OK)
 
     def list(self, request, *args, **kwargs):
-        print('request', request)
         queryset = self.filter_queryset(self.get_queryset())
         query = request.query_params.get('query', '')
 
@@ -91,3 +90,13 @@ class JobOpeningViewSet(ModelViewSet):
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+    @action(detail=True, methods=['post'])
+    @permission_classes([permissions.IsAuthenticated])
+    def respond(self, request, *args, **kwargs):
+        job_opening = self.get_object()
+        user = request.user
+        applicant = user.applicant
+        job_opening.applicants.append(applicant)
+        job_opening.save()
+        return Response(JobOpeningListSerializer(data=job_opening).data)

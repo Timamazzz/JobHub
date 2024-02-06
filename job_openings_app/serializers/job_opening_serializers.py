@@ -19,11 +19,26 @@ class JobOpeningListSerializer(serializers.ModelSerializer):
     employer_address = serializers.CharField(source='employer.legal_address')
     employer_site = serializers.CharField(source='employer.site')
 
+    applicants = serializers.SerializerMethodField()
+
     class Meta:
         model = JobOpening
         fields = ('id', 'job_type', 'job_category', 'job_activity', 'title', 'description',
                   'salary_min', 'salary_max', 'employer_name', 'employer_description', 'employer_address',
                   'employer_site', 'created_at', 'applicants')
+
+    def get_applicants(self, obj):
+        applicants = obj.applicants.all()
+        avatar_urls = []
+        for applicant in applicants:
+            try:
+                avatar_url = applicant.applicantavatar_set.first().file.url
+                avatar_urls.append(avatar_url)
+            except AttributeError:
+                avatar_urls.append('applicant dont have avatar url')
+                continue
+
+        return avatar_urls
 
 
 class JobOpeningCreateUpdateSerializer(serializers.ModelSerializer):
