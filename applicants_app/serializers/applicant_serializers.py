@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from JobHub.utils.fields import PhoneField
 from applicants_app.models import Applicant
+from docs_app.models import ApplicantAvatar
 from docs_app.serializers.ApplicantAvatarSerializer import ApplicantCreateAvatarSerializer, \
     ApplicantRetrieveAvatarSerializer
 
@@ -13,7 +14,15 @@ class ApplicantSerializer(serializers.ModelSerializer):
 
 
 class ApplicantRetrieveSerializer(serializers.ModelSerializer):
-    avatar = ApplicantRetrieveAvatarSerializer(many=False, read_only=True)
+    avatar = serializers.SerializerMethodField()
+
+    def get_avatar(self, applicant):
+        try:
+            avatar = ApplicantAvatar.objects.get(applicant=applicant)
+            avatar_url = avatar.file.url
+        except ApplicantAvatar.DoesNotExist:
+            avatar_url = None
+        return avatar_url
 
     class Meta:
         model = Applicant
