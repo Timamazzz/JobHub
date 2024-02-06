@@ -105,7 +105,10 @@ class JobOpeningViewSet(ModelViewSet):
         applicant = user.applicant_profile
         job_opening.applicants.add(applicant)
         job_opening.save()
-        return Response(JobOpeningListSerializer(data=job_opening).data)
+
+        JobOpeningListSerializer(data=job_opening).is_valid()
+        data = JobOpeningListSerializer(data=job_opening).data
+        return Response(data, status=status.HTTP_200_OK)
 
 
 class JobCategoryViewSet(ModelViewSet):
