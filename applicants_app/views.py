@@ -10,6 +10,7 @@ from applicants_app.filters.ApplicantFilter import ApplicantFilter
 from applicants_app.models import Applicant
 from applicants_app.serializers.applicant_serializers import ApplicantSerializer, ApplicantRetrieveSerializer, \
     ApplicantUpdateSerializer
+from users_app.permissions import IsApplicant
 
 
 # Create your views here.
@@ -17,7 +18,7 @@ class ApplicantViewSet(ModelViewSet):
     queryset = Applicant.objects.all()
     serializer_class = ApplicantSerializer
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsApplicant]
     filterset_class = ApplicantFilter
     filter_backends = [DjangoFilterBackend]
     serializer_list = {

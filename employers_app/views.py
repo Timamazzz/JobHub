@@ -1,4 +1,4 @@
-from rest_framework import status
+from rest_framework import status, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from post_office import mail
@@ -8,6 +8,7 @@ from employers_app.filters.employer_filters import EmployerFilter
 from employers_app.models import Employer
 from employers_app.serializers.employers_serializers import EmployerSerializer, EmployerModerationDataSerializer, \
     EmployerLoginSerializer, EmployerFilterListSerializer
+from users_app.permissions import IsEmployer
 
 
 # Create your views here.
@@ -15,6 +16,7 @@ class EmployerViewSet(ModelViewSet):
     queryset = Employer.objects.all()
     serializer_class = EmployerSerializer
     filterset_class = EmployerFilter
+    permission_classes = [IsEmployer]
     serializer_list = {
         'send-to-moderation': EmployerModerationDataSerializer,
         'login': EmployerLoginSerializer,
@@ -22,6 +24,7 @@ class EmployerViewSet(ModelViewSet):
     }
 
     @action(detail=False, methods=['post'], url_path='send-to-moderation')
+    @permission_classes([permissions.AllowAny,])
     def send_to_moderation(self, request):
         serializer = EmployerModerationDataSerializer(data=request.data)
         if serializer.is_valid():
@@ -42,4 +45,3 @@ class EmployerViewSet(ModelViewSet):
             return Response({'detail': 'Data sent for moderation'}, status=status.HTTP_200_OK)
         else:
             return Response({'error': 'Invalid data', 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
-

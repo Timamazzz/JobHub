@@ -14,12 +14,14 @@ from job_openings_app.serializers.job_activity_serializers import JobActivitySer
 from job_openings_app.serializers.job_category_serializers import JobCategorySerializer, JobCategoryListSerializer
 from job_openings_app.serializers.job_opening_serializers import JobOpeningSerializer, JobOpeningListSerializer, \
     JobOpeningCreateUpdateSerializer, JobOpeningListFilterSerializer
+from users_app.permissions import IsEmployer, IsApplicant
 
 
 # Create your views here.
 class JobOpeningViewSet(ModelViewSet):
     queryset = JobOpening.objects.all()
     serializer_class = JobOpeningSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     filterset_class = JobOpeningFilter
     filter_backends = [DjangoFilterBackend, SearchFilter]
     search_fields = ['title', 'description', 'job_type__name', 'job_category__name', 'job_activity__name',
@@ -54,6 +56,7 @@ class JobOpeningViewSet(ModelViewSet):
             raise ValidationError("User does not have associated Employer")
 
     @action(detail=True, methods=['post'], url_path='found-applicants')
+    @permission_classes([IsEmployer])
     def found_applicants(self, request, pk=None):
         job_opening = self.get_object()
         job_opening.archived = True
@@ -63,6 +66,7 @@ class JobOpeningViewSet(ModelViewSet):
         return Response({'detail': 'Applicants found for the job opening.'}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['post'], url_path='move-to-archive')
+    @permission_classes([IsEmployer])
     def move_to_archive(self, request, pk=None):
         job_opening = self.get_object()
         job_opening.archived = True
@@ -94,7 +98,7 @@ class JobOpeningViewSet(ModelViewSet):
         return Response(serializer.data)
 
     @action(detail=True, methods=['post'])
-    @permission_classes([permissions.IsAuthenticated])
+    @permission_classes([IsApplicant])
     def respond(self, request, *args, **kwargs):
         job_opening = self.get_object()
         user = request.user
@@ -107,6 +111,7 @@ class JobOpeningViewSet(ModelViewSet):
 class JobCategoryViewSet(ModelViewSet):
     queryset = JobCategory.objects.all()
     serializer_class = JobCategorySerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     serializer_list = {
         'list': JobCategoryListSerializer,
     }
@@ -115,6 +120,7 @@ class JobCategoryViewSet(ModelViewSet):
 class JobActivityViewSet(ModelViewSet):
     queryset = JobActivity.objects.all()
     serializer_class = JobActivitySerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     serializer_list = {
         'list': JobActivityListSerializer,
     }

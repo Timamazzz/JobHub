@@ -36,7 +36,6 @@ def save_uploaded_files(uploaded_files, path='uploads/'):
                     path = default_storage.save(os.path.join(path, new_name), ContentFile(response.content))
                     url = default_storage.url(path)
                 except Exception as e:
-                    print(f"Error saving file: {e}")
                     return HttpResponseServerError("Internal Server Error")
         else:
             original_name = uploaded_file.name
@@ -47,7 +46,6 @@ def save_uploaded_files(uploaded_files, path='uploads/'):
                 path = default_storage.save(os.path.join(path, new_name), uploaded_file)
                 url = default_storage.url(path)
             except Exception as e:
-                print(f"Error saving file: {e}")
                 return HttpResponseServerError("Internal Server Error")
 
         url = url.replace("media/", "")
