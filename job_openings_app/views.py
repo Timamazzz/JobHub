@@ -105,7 +105,7 @@ class JobOpeningViewSet(ModelViewSet):
         user = request.user
         applicant = user.applicant_profile
 
-        if applicant not in job_opening.applicants:
+        if job_opening.applicants.filter(id=applicant.id).exists():
             job_opening.applicants.add(applicant)
             job_opening.save()
 
