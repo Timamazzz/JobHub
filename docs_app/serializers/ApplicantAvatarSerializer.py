@@ -18,4 +18,4 @@ class ApplicantCreateAvatarSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ApplicantAvatar
-        fields = ('file', 'original_name', 'upload_time', 'extension')
+        fields = ('file', 'original_name', 'extension')
