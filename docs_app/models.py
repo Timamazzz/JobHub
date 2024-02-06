@@ -1,6 +1,4 @@
 from django.db import models
-
-from applicants_app.models import Applicant
 from feed_app.models import Event, Excursion
 
 
@@ -45,7 +43,7 @@ class ApplicantAvatar(models.Model):
     extension = models.CharField(max_length=10, verbose_name='Расширение')
 
     def __str__(self):
-        return f'{self.original_name} ({self.applicant})'
+        return f'{self.original_name}'
 
     class Meta:
         verbose_name = 'Аватар'
