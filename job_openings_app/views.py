@@ -108,7 +108,7 @@ class JobOpeningViewSet(ModelViewSet):
         job_opening.applicants.add(applicant)
         job_opening.save()
 
-        Response("Молодец!", status=status.HTTP_200_OK)
+        Response({"message": "Молодец!"}, status=status.HTTP_200_OK)
 
 
 class JobCategoryViewSet(ModelViewSet):
