@@ -32,7 +32,7 @@ class JobOpeningListSerializer(serializers.ModelSerializer):
         avatar_urls = []
         for applicant in applicants:
             try:
-                avatar_url = applicant.applicantavatar_set.first().file.url
+                avatar_url = applicant.avatar.file
                 avatar_urls.append(avatar_url)
             except AttributeError:
                 avatar_urls.append('applicant dont have avatar url')
