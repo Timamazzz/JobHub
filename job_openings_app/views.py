@@ -1,6 +1,6 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, permissions
-from rest_framework.decorators import action, permission_classes as view_permission_classes
+from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.filters import SearchFilter
 from rest_framework.response import Response
@@ -14,6 +14,7 @@ from job_openings_app.serializers.job_category_serializers import JobCategorySer
 from job_openings_app.serializers.job_opening_serializers import JobOpeningSerializer, JobOpeningListSerializer, \
     JobOpeningCreateUpdateSerializer, JobOpeningListFilterSerializer
 from users_app.permissions import IsEmployer, IsApplicant
+from rest_framework.decorators import permission_classes as action_permission_classes
 
 
 # Create your views here.
@@ -55,7 +56,7 @@ class JobOpeningViewSet(ModelViewSet):
             raise ValidationError("User does not have associated Employer")
 
     @action(detail=True, methods=['post'], url_path='found-applicants')
-    @permission_classes([IsEmployer])
+    @action_permission_classes((IsEmployer, ))
     def found_applicants(self, request, pk=None):
         job_opening = self.get_object()
         job_opening.archived = True
@@ -65,7 +66,7 @@ class JobOpeningViewSet(ModelViewSet):
         return Response({'detail': 'Applicants found for the job opening.'}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['post'], url_path='move-to-archive')
-    @view_permission_classes((IsEmployer, ))
+    @action_permission_classes((IsEmployer, ))
     def move_to_archive(self, request, pk=None):
         job_opening = self.get_object()
         job_opening.archived = True
@@ -97,7 +98,7 @@ class JobOpeningViewSet(ModelViewSet):
         return Response(serializer.data)
 
     @action(detail=True, methods=['post'])
-    @permission_classes([IsApplicant])
+    @action_permission_classes((IsApplicant, ))
     def respond(self, request, *args, **kwargs):
         job_opening = self.get_object()
         user = request.user
