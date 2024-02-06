@@ -18,7 +18,7 @@ class ApplicantViewSet(ModelViewSet):
     queryset = Applicant.objects.all()
     serializer_class = ApplicantSerializer
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsApplicant]
+    #permission_classes = [IsApplicant]
     filterset_class = ApplicantFilter
     filter_backends = [DjangoFilterBackend]
     serializer_list = {
