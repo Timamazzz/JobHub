@@ -107,7 +107,7 @@ class JobOpeningViewSet(ModelViewSet):
         job_opening.applicants.add(applicant)
         job_opening.save()
 
-        serializer = JobOpeningListSerializer(job_opening)
+        serializer = JobOpeningListSerializer(data=job_opening)
 
         if serializer.is_valid():
             Response(serializer.data, status=status.HTTP_200_OK)
