@@ -8,7 +8,8 @@ from django.http import HttpResponse, JsonResponse, HttpResponseServerError
 from django.shortcuts import redirect
 from rest_framework import status
 from rest_framework.decorators import action
-from JobHub.settings import SOCIAL_AUTH_VK_OAUTH2_KEY, SOCIAL_AUTH_VK_OAUTH2_SECRET
+from JobHub.settings import SOCIAL_AUTH_VK_OAUTH2_KEY, SOCIAL_AUTH_VK_OAUTH2_SECRET, AFTER_VK_AUTH_REDIRECT_REGISTER, \
+    AFTER_VK_AUTH_REDIRECT_LOGIN
 from JobHub.utils.FileUploadView import save_uploaded_files
 from JobHub.utils.ModelViewSet import ModelViewSet
 from JobHub.utils.fields import formate_phone
@@ -118,14 +119,9 @@ class UserViewSet(ModelViewSet):
             refresh = RefreshToken.for_user(user)
             access_token = refresh.access_token
 
-            # if created:
-            #     return redirect(f'http://localhost:3000/profile?access_token={access_token}&refresh_token={refresh}')
-            # else:
-            #     return redirect(f'http://localhost:3000/?access_token={access_token}&refresh_token={refresh}')
-
             if created:
-                return redirect(f'/profile?access_token={access_token}&refresh_token={refresh}')
+                return redirect(f'{AFTER_VK_AUTH_REDIRECT_REGISTER}?access_token={access_token}&refresh_token={refresh}')
             else:
-                return redirect(f'/?access_token={access_token}&refresh_token={refresh}')
+                return redirect(f'{AFTER_VK_AUTH_REDIRECT_LOGIN}?access_token={access_token}&refresh_token={refresh}')
 
         return HttpResponse({}, status=status.HTTP_200_OK)
