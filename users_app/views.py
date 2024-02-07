@@ -88,7 +88,6 @@ class UserViewSet(ModelViewSet):
                 last_name = user_info[0]['last_name']
                 birth_date = datetime.strptime(user_info[0].get('bdate'), '%d.%m.%Y').strftime('%Y-%m-%d')
                 phone_number = formate_phone(user_info[0].get('mobile_phone'))
-                print('bdate', birth_date)
                 applicant_profile, created = Applicant.objects.get_or_create(
                     user=user,
                     vk_id=vk_user_id,
