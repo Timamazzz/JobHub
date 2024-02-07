@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from rest_framework.serializers import raise_errors_on_nested_writes
+from rest_framework.utils import model_meta
 
 from docs_app.models import ApplicantAvatar
 

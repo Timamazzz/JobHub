@@ -41,7 +41,8 @@ class ApplicantCreateSerializer(serializers.ModelSerializer):
 
 
 class ApplicantUpdateSerializer(WritableNestedModelSerializer):
-    avatar = ApplicantCreateOrUpdateAvatarSerializer()
+    #avatar = ApplicantCreateOrUpdateAvatarSerializer()
+    avatar = serializers.CharField()
     phone_number = PhoneField()
 
     class Meta:
