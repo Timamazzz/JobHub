@@ -6,7 +6,7 @@ from docs_app.models import ApplicantAvatar
 
 
 class ApplicantRetrieveAvatarSerializer(serializers.ModelSerializer):
-    file = serializers.URLField()
+    file = serializers.CharField()
 
     class Meta:
         model = ApplicantAvatar
