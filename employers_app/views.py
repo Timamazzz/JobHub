@@ -7,7 +7,7 @@ from JobHub.utils.ModelViewSet import ModelViewSet
 from employers_app.filters.employer_filters import EmployerFilter
 from employers_app.models import Employer
 from employers_app.serializers.employers_serializers import EmployerSerializer, EmployerModerationDataSerializer, \
-    EmployerLoginSerializer, EmployerFilterListSerializer
+    EmployerLoginSerializer, EmployerFilterListSerializer, EmployerRetrieveSerializer
 from users_app.permissions import IsEmployer
 from rest_framework.decorators import permission_classes as action_permission_classes
 
@@ -21,8 +21,16 @@ class EmployerViewSet(ModelViewSet):
     serializer_list = {
         'send-to-moderation': EmployerModerationDataSerializer,
         'login': EmployerLoginSerializer,
-        'filter-list': EmployerFilterListSerializer
+        'filter-list': EmployerFilterListSerializer,
+        'get-by-user': EmployerRetrieveSerializer
     }
+
+    @action(detail=False, methods=['GET'], url_path='get-by-user')
+    def get_by_user(self, request):
+        user = request.user
+        employer = user.employer_profile
+        serializer = EmployerRetrieveSerializer(employer)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['post'], url_path='send-to-moderation')
     @action_permission_classes((permissions.AllowAny,))

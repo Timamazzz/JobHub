@@ -32,3 +32,9 @@ class EmployerFilterListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Employer
         fields = ('user',)
+
+
+class EmployerRetrieveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Employer
+        fields = '__all__'
