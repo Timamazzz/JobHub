@@ -121,6 +121,7 @@ class JobCategoryViewSet(ModelViewSet):
     queryset = JobCategory.objects.all()
     serializer_class = JobCategorySerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    pagination_class = None
     serializer_list = {
         'list': JobCategoryListSerializer,
     }
@@ -130,6 +131,7 @@ class JobActivityViewSet(ModelViewSet):
     queryset = JobActivity.objects.all()
     serializer_class = JobActivitySerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    pagination_class = None
     serializer_list = {
         'list': JobActivityListSerializer,
     }
