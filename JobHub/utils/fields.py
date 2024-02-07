@@ -10,7 +10,7 @@ def formate_phone(phone):
     if len(digits_only) == 11 and digits_only.startswith('8'):
         digits_only = '+7' + digits_only[1:]
 
-    formatted_phone = f'+{digits_only[1:4]} {digits_only[4:7]}-{digits_only[7:9]}-{digits_only[9:]}'
+    formatted_phone = f'{digits_only[1:4]}{digits_only[4:7]}{digits_only[7:9]}{digits_only[9:]}'
 
     return formatted_phone
 
