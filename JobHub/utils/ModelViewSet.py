@@ -28,29 +28,29 @@ class ModelViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         return self.serializer_list.get(self.action, self.serializer_class)
 
-    def update(self, request, *args, **kwargs):
-        print('Updating model')
-        partial = kwargs.pop('partial', False)
-        filename = None
-        print('request.data', request.data)
-
-        if request.data['avatar'].get('file'):
-            filename = request.data['avatar'].get('file', None) if not request.data['avatar'].get('file') == "" else None
-            request.data['avatar'].pop('file', None)
-
-        print('request.data', request.data)
-
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-
-        if filename or filename == {}:
-            FileFieldUpdate(serializer.Meta.model, serializer.data['id'], filename)
-
-        if getattr(instance, '_prefetched_objects_cache', None):
-            # If 'prefetch_related' has been applied to a queryset, we need to
-            # forcibly invalidate the prefetch cache on the instance.
-            instance._prefetched_objects_cache = {}
-
-        return Response(serializer.data)
+    # def update(self, request, *args, **kwargs):
+    #     print('Updating model')
+    #     partial = kwargs.pop('partial', False)
+    #     filename = None
+    #     print('request.data', request.data)
+    #
+    #     if request.data['avatar'].get('file'):
+    #         filename = request.data['avatar'].get('file', None) if not request.data['avatar'].get('file') == "" else None
+    #         request.data['avatar'].pop('file', None)
+    #
+    #     print('request.data', request.data)
+    #
+    #     instance = self.get_object()
+    #     serializer = self.get_serializer(instance, data=request.data, partial=partial)
+    #     serializer.is_valid(raise_exception=True)
+    #     self.perform_update(serializer)
+    #
+    #     if filename or filename == {}:
+    #         FileFieldUpdate(serializer.Meta.model, serializer.data['id'], filename)
+    #
+    #     if getattr(instance, '_prefetched_objects_cache', None):
+    #         # If 'prefetch_related' has been applied to a queryset, we need to
+    #         # forcibly invalidate the prefetch cache on the instance.
+    #         instance._prefetched_objects_cache = {}
+    #
+    #     return Response(serializer.data)
