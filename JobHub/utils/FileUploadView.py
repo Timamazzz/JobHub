@@ -50,7 +50,7 @@ def save_uploaded_files(uploaded_files, path='uploads/'):
 
         url = url.replace("media/", "")
         file_data = {
-            'url': url,
+            'file': url,
             'original_name': original_name,
             'extension': extension,
         }
