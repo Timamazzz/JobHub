@@ -33,7 +33,7 @@ class EmployerViewSet(ModelViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['post'], url_path='send-to-moderation')
-    @action_permission_classes((permissions.AllowAny,))
+    #@action_permission_classes((permissions.AllowAny,))
     def send_to_moderation(self, request):
         serializer = EmployerModerationDataSerializer(data=request.data)
         if serializer.is_valid():
