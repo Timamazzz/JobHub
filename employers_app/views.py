@@ -2,6 +2,8 @@ from rest_framework import status, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from post_office import mail
+from rest_framework.views import APIView
+
 from JobHub import settings
 from JobHub.utils.ModelViewSet import ModelViewSet
 from employers_app.filters.employer_filters import EmployerFilter
@@ -32,12 +34,11 @@ class EmployerViewSet(ModelViewSet):
         serializer = EmployerRetrieveSerializer(employer)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @action(detail=False, methods=['post'], url_path='send-to-moderation')
-    @action_permission_classes((True,))
-    def send_to_moderation(self, request):
+
+class SendToModerationAPIView(APIView):
+    def post(self, request):
         serializer = EmployerModerationDataSerializer(data=request.data)
         if serializer.is_valid():
-
             subject = 'Data for Moderation'
             message = f'Data for moderation has been received:\n\n{serializer.data}'
             html_message = f'<p>Data for moderation has been received:</p><pre>{serializer.data}</pre>'
@@ -53,4 +54,5 @@ class EmployerViewSet(ModelViewSet):
 
             return Response({'detail': 'Data sent for moderation'}, status=status.HTTP_200_OK)
         else:
-            return Response({'error': 'Invalid data', 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Invalid data', 'errors': serializer.errors},
+                            status=status.HTTP_400_BAD_REQUEST)
