@@ -50,14 +50,8 @@ class ApplicantUpdateSerializer(WritableNestedModelSerializer):
 
 
 class ApplicantForJobOpeningsListSerializer(WritableNestedModelSerializer):
-    avatar_url = serializers.SerializerMethodField()
+    avatar = serializers.CharField(source='avatar.file')
 
     class Meta:
         model = Applicant
-        fields = ('id', 'fio', 'birth_date', 'phone_number', 'avatar_url')
-
-    def get_avatar_url(self, obj):
-        try:
-            return obj.avatar.file.url
-        except AttributeError:
-            return None
+        fields = ('id', 'fio', 'birth_date', 'phone_number', 'avatar')
