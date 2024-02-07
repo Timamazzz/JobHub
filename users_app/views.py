@@ -68,15 +68,10 @@ class UserViewSet(ModelViewSet):
         vk = vk_session.get_api()
         user_info = vk.users.get(user_ids=vk_user_id, fields='first_name,last_name,bdate,contacts,domain,photo_200')
 
-        first_name = user_info[0]['first_name']
-        last_name = user_info[0]['last_name']
-        birth_date = datetime.strptime(user_info[0].get('bdate'), '%d.%m.%Y').strftime('%Y-%m-%d')
-        phone_number = formate_phone(user_info[0].get('mobile_phone'))
         domain = user_info[0].get('domain')
         photo = user_info[0].get('photo_200')
 
         email = data.get('email') if data.get('email') is not None else f'{vk_user_id}@mail.com'
-        applicant_email = data.get('email') if data.get('email') is not None else None
 
         with transaction.atomic():
             user, created = User.objects.get_or_create(
@@ -87,40 +82,47 @@ class UserViewSet(ModelViewSet):
                 }
             )
 
-            applicant_profile, created = Applicant.objects.get_or_create(
-                user=user,
-                vk_id=vk_user_id,
-                defaults={
-                    'fio': f'{first_name} {last_name}',
-                    'birth_date': birth_date,
-                    'phone_number': phone_number,
-                    'email': applicant_email,
-                }
-            )
+            if created:
+                applicant_email = data.get('email') if data.get('email') is not None else None
+                first_name = user_info[0]['first_name']
+                last_name = user_info[0]['last_name']
+                birth_date = datetime.strptime(user_info[0].get('bdate'), '%d.%m.%Y').strftime('%Y-%m-%d')
+                phone_number = formate_phone(user_info[0].get('mobile_phone'))
+                print('bdate', bdate)
+                applicant_profile, created = Applicant.objects.get_or_create(
+                    user=user,
+                    vk_id=vk_user_id,
+                    defaults={
+                        'fio': f'{first_name} {last_name}',
+                        'birth_date': birth_date,
+                        'phone_number': phone_number,
+                        'email': applicant_email,
+                    }
+                )
 
-            if created and photo:
-                avatar_file_data = save_uploaded_files([photo])
-                for file_data in avatar_file_data:
-                    try:
-                        print('file_data', file_data)
-                        applicant_avatar = ApplicantAvatar.objects.create(
-                            file=file_data['url'],
-                            original_name=file_data['original_name'],
-                            extension=file_data['extension']
-                        )
+                if created and photo:
+                    avatar_file_data = save_uploaded_files([photo])
+                    for file_data in avatar_file_data:
+                        try:
+                            applicant_avatar = ApplicantAvatar.objects.create(
+                                file=file_data['url'],
+                                original_name=file_data['original_name'],
+                                extension=file_data['extension']
+                            )
 
-                        applicant_profile.avatar = applicant_avatar
-                        applicant_profile.save()
+                            applicant_profile.avatar = applicant_avatar
+                            applicant_profile.save()
 
-                    except Exception as e:
-                        return HttpResponseServerError("Internal Server Error")
+                        except Exception as e:
+                            return HttpResponseServerError("Internal Server Error")
 
         if user is not None:
             refresh = RefreshToken.for_user(user)
             access_token = refresh.access_token
 
             if created:
-                return redirect(f'{AFTER_VK_AUTH_REDIRECT_REGISTER}?access_token={access_token}&refresh_token={refresh}')
+                return redirect(
+                    f'{AFTER_VK_AUTH_REDIRECT_REGISTER}?access_token={access_token}&refresh_token={refresh}')
             else:
                 return redirect(f'{AFTER_VK_AUTH_REDIRECT_LOGIN}?access_token={access_token}&refresh_token={refresh}')
 
