@@ -11,7 +11,7 @@ class ApplicantRetrieveAvatarSerializer(serializers.ModelSerializer):
 
 
 class ApplicantCreateOrUpdateAvatarSerializer(serializers.ModelSerializer):
-    file = serializers.CharField(max_length=256)
+    file = serializers.CharField(max_length=1024)
 
     class Meta:
         model = ApplicantAvatar

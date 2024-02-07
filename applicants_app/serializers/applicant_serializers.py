@@ -18,6 +18,14 @@ class ApplicantSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class ApplicantListSerializer(serializers.ModelSerializer):
+    avatar = ApplicantRetrieveAvatarSerializer()
+
+    class Meta:
+        model = Applicant
+        fields = ('id', 'fio', 'birth_date', 'phone_number', 'email', 'resume', 'avatar')
+
+
 class ApplicantRetrieveSerializer(serializers.ModelSerializer):
     avatar = ApplicantRetrieveAvatarSerializer()
 

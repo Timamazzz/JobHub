@@ -9,7 +9,7 @@ from JobHub.utils.ModelViewSet import ModelViewSet
 from applicants_app.filters.ApplicantFilter import ApplicantFilter
 from applicants_app.models import Applicant
 from applicants_app.serializers.applicant_serializers import ApplicantSerializer, ApplicantRetrieveSerializer, \
-    ApplicantUpdateSerializer
+    ApplicantUpdateSerializer, ApplicantListSerializer
 from users_app.permissions import IsApplicant
 
 
@@ -25,6 +25,7 @@ class ApplicantViewSet(ModelViewSet):
         'retrieve': ApplicantRetrieveSerializer,
         'update': ApplicantUpdateSerializer,
         'get-by-user': ApplicantRetrieveSerializer,
+        'list': ApplicantListSerializer,
     }
 
     @action(detail=False, methods=['GET'], url_path='get-by-user')
