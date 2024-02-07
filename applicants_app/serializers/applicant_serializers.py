@@ -26,7 +26,7 @@ class ApplicantListSerializer(serializers.ModelSerializer):
         fields = ('id', 'fio', 'birth_date', 'phone_number', 'email', 'resume', 'avatar')
 
 
-class ApplicantRetrieveSerializer(serializers.ModelSerializer):
+class ApplicantRetrieveSerializer(WritableNestedModelSerializer):
     avatar = ApplicantRetrieveAvatarSerializer()
 
     class Meta:
