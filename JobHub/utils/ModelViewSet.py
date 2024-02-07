@@ -3,7 +3,7 @@ from JobHub.utils.OptionsMetadata import OptionsMetadata
 from JobHub.utils.UpdateModelMixin import UpdateModelMixin
 
 
-class ModelViewSet(viewsets.ModelViewSet, UpdateModelMixin):
+class ModelViewSet(UpdateModelMixin, viewsets.ModelViewSet):
     serializer_list = {}
     metadata_class = OptionsMetadata
 
