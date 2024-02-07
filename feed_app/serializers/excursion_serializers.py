@@ -20,7 +20,7 @@ class ExcursionListSerializer(serializers.ModelSerializer):
     def get_preview_image(self, excursion):
         preview_image = ExcursionImage.objects.filter(excursion=excursion, is_preview=True).first()
         if preview_image:
-            preview_image.replace("media/", "")
+            preview_image = preview_image.url.replace("media/", "")
         return preview_image.file.url if preview_image else None
 
 
@@ -45,5 +45,5 @@ class ExcursionRetrieveSerializer(serializers.ModelSerializer):
     def get_preview_image(self, excursion):
         preview_image = ExcursionImage.objects.filter(excursion=excursion, is_preview=True).first()
         if preview_image:
-            preview_image.replace("media/", "")
+            preview_image = preview_image.url.replace("media/", "")
         return preview_image.file.url if preview_image else None
