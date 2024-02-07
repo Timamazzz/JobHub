@@ -15,6 +15,8 @@ class ApplicantRetrieveAvatarSerializer(serializers.ModelSerializer):
 
 
 class ApplicantCreateOrUpdateAvatarSerializer(serializers.ModelSerializer):
+    file = serializers.CharField(max_length=256)
+
     class Meta:
         model = ApplicantAvatar
         fields = ('id', 'file', 'original_name', 'extension')
@@ -26,5 +28,3 @@ class ApplicantCreateOrUpdateAvatarSerializer(serializers.ModelSerializer):
         instance.extension = validated_data.get('extension', instance.extension)
         instance.save()
         return instance
-
-
