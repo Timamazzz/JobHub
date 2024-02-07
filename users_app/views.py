@@ -101,6 +101,7 @@ class UserViewSet(ModelViewSet):
                 avatar_file_data = save_uploaded_files([photo])
                 for file_data in avatar_file_data:
                     try:
+                        print('file_data', file_data)
                         applicant_avatar = ApplicantAvatar.objects.create(
                             file=file_data['url'],
                             original_name=file_data['original_name'],
