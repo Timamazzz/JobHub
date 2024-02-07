@@ -18,7 +18,7 @@ class ApplicantSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ApplicantRetrieveSerializer(serializers.ModelSerializer):
+class ApplicantRetrieveSerializer(WritableNestedModelSerializer):
     avatar = ApplicantRetrieveAvatarSerializer()
 
     class Meta:
