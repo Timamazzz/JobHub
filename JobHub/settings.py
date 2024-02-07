@@ -47,8 +47,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_filters',
     'oauth2_provider',
-    'social_django',
-    'drf_social_oauth2',
     'docs_app',
     'users_app',
     'feed_app',
@@ -82,8 +80,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'social_django.context_processors.backends',
-                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -154,8 +150,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
-        'drf_social_oauth2.authentication.SocialAuthentication',
     ),
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
@@ -163,9 +157,7 @@ REST_FRAMEWORK = {
 }
 
 AUTHENTICATION_BACKENDS = (
-    'social_core.backends.vk.VKOAuth2',
     'django.contrib.auth.backends.ModelBackend',
-    'drf_social_oauth2.backends.DjangoOAuth2',
 )
 # Simple Jwt
 SIMPLE_JWT = {
@@ -209,6 +201,3 @@ EMAIL_HOST_USER = '89205731783@mail.ru'
 # EMAIL_HOST_PASSWORD = 'Astra1988!'
 EMAIL_HOST_PASSWORD = 'd0583b8b07be826de4da838a26c60cd5'
 
-SOCIAL_AUTH_VK_OAUTH2_KEY = '51846722'
-SOCIAL_AUTH_VK_OAUTH2_SECRET = '1HEfeVQlp9rXuYzDPZ88'
-SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
