@@ -20,7 +20,7 @@ class EventListSerializer(serializers.ModelSerializer):
     def get_preview_image(self, event):
         preview_image = EventImage.objects.filter(event=event, is_preview=True).first()
         if preview_image:
-            preview_image = preview_image.url.replace("media/", "")
+            preview_image = preview_image.file.replace("media/", "")
         return preview_image.file.url if preview_image else None
 
 
@@ -45,5 +45,5 @@ class EventRetrieveSerializer(serializers.ModelSerializer):
     def get_preview_image(self, event):
         preview_image = EventImage.objects.filter(event=event, is_preview=True).first()
         if preview_image:
-            preview_image = preview_image.url.replace("media/", "")
+            preview_image = preview_image.file.replace("media/", "")
         return preview_image.file.url if preview_image else None
