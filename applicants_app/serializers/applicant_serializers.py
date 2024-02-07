@@ -32,9 +32,8 @@ class ApplicantCreateSerializer(serializers.ModelSerializer):
 
 
 class ApplicantUpdateSerializer(serializers.ModelSerializer):
-    avatar = ApplicantCreateOrUpdateAvatarSerializer(required=False)
+    #avatar = ApplicantCreateOrUpdateAvatarSerializer(required=False)
     phone_number = PhoneField()
-
     avatar = serializers.DictField(child=serializers.CharField(), required=False)
 
     class Meta:
