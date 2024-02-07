@@ -19,4 +19,12 @@ class ApplicantCreateOrUpdateAvatarSerializer(serializers.ModelSerializer):
         model = ApplicantAvatar
         fields = ('id', 'file', 'original_name', 'extension')
 
+    def update(self, instance, validated_data):
+        print('update')
+        instance.file = validated_data.get('file', instance.file)
+        instance.original_name = validated_data.get('original_name', instance.original_name)
+        instance.extension = validated_data.get('extension', instance.extension)
+        instance.save()
+        return instance
+
 
