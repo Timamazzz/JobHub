@@ -14,9 +14,9 @@ class ApplicantRetrieveAvatarSerializer(serializers.ModelSerializer):
         return obj.file.url
 
 
-class ApplicantCreateAvatarSerializer(serializers.ModelSerializer):
+class ApplicantCreateOrUpdateAvatarSerializer(serializers.ModelSerializer):
     class Meta:
         model = ApplicantAvatar
-        fields = ('file', 'original_name', 'extension')
+        fields = ('id', 'file', 'original_name', 'extension')
 
 

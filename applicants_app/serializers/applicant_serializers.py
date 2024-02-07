@@ -7,7 +7,7 @@ from rest_framework.utils import model_meta
 from JobHub.utils.fields import PhoneField
 from applicants_app.models import Applicant
 from docs_app.models import ApplicantAvatar
-from docs_app.serializers.ApplicantAvatarSerializer import ApplicantCreateAvatarSerializer, \
+from docs_app.serializers.ApplicantAvatarSerializer import ApplicantCreateOrUpdateAvatarSerializer, \
     ApplicantRetrieveAvatarSerializer
 
 
@@ -32,7 +32,7 @@ class ApplicantCreateSerializer(serializers.ModelSerializer):
 
 
 class ApplicantUpdateSerializer(serializers.ModelSerializer):
-    avatar = ApplicantCreateAvatarSerializer(required=False)
+    avatar = ApplicantCreateOrUpdateAvatarSerializer(required=False)
     phone_number = PhoneField()
 
     class Meta:
@@ -45,9 +45,9 @@ class ApplicantUpdateSerializer(serializers.ModelSerializer):
         if avatar_data:
             avatar_instance = instance.avatar
             if avatar_instance:
-                avatar_serializer = ApplicantCreateAvatarSerializer(instance=avatar_instance, data=avatar_data)
+                avatar_serializer = ApplicantCreateOrUpdateAvatarSerializer(instance=avatar_instance, data=avatar_data)
             else:
-                avatar_serializer = ApplicantCreateAvatarSerializer(data=avatar_data)
+                avatar_serializer = ApplicantCreateOrUpdateAvatarSerializer(data=avatar_data)
 
             if avatar_serializer.is_valid():
                 avatar_serializer.save(applicant=instance)
