@@ -35,22 +35,38 @@ class ApplicantUpdateSerializer(serializers.ModelSerializer):
     avatar = ApplicantCreateOrUpdateAvatarSerializer(required=False)
     phone_number = PhoneField()
 
+    avatar = serializers.DictField(child=serializers.CharField(), required=False)
+
     class Meta:
         model = Applicant
-        fields = ('avatar', 'fio', 'birth_date', 'phone_number', 'email', 'resume')
+        fields = ('id', 'avatar', 'fio', 'birth_date', 'phone_number', 'email', 'resume')
+
+    def create(self, validated_data):
+        avatar_data = validated_data.pop('avatar', None)
+        applicant = Applicant.objects.create(**validated_data)
+
+        if avatar_data:
+            avatar = ApplicantAvatar.objects.create(**avatar_data, applicant=applicant)
+            applicant.avatar = avatar
+            applicant.save()
+
+        return applicant
 
     def update(self, instance, validated_data):
-        print('hello')
         avatar_data = validated_data.pop('avatar', None)
         if avatar_data:
-            avatar_instance = instance.avatar
-            if avatar_instance:
-                avatar_serializer = ApplicantCreateOrUpdateAvatarSerializer(instance=avatar_instance, data=avatar_data)
+            avatar_id = avatar_data.pop('id', None)
+            if avatar_id:
+                # Обновляем существующий аватар
+                avatar = instance.avatar
+                avatar.file = avatar_data.get('file', avatar.file)
+                avatar.original_name = avatar_data.get('original_name', avatar.original_name)
+                avatar.extension = avatar_data.get('extension', avatar.extension)
+                avatar.save()
             else:
-                avatar_serializer = ApplicantCreateOrUpdateAvatarSerializer(data=avatar_data)
-
-            if avatar_serializer.is_valid():
-                avatar_serializer.save(applicant=instance)
+                # Создаем новый аватар
+                avatar = ApplicantAvatar.objects.create(**avatar_data, applicant=instance)
+                instance.avatar = avatar
 
         instance.fio = validated_data.get('fio', instance.fio)
         instance.birth_date = validated_data.get('birth_date', instance.birth_date)
