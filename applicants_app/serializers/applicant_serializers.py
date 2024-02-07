@@ -40,9 +40,8 @@ class ApplicantCreateSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ApplicantUpdateSerializer(serializers.ModelSerializer):
-    #avatar = ApplicantCreateOrUpdateAvatarSerializer()
-    avatar = serializers.CharField()
+class ApplicantUpdateSerializer(WritableNestedModelSerializer):
+    avatar = ApplicantCreateOrUpdateAvatarSerializer()
     phone_number = PhoneField()
 
     class Meta:
