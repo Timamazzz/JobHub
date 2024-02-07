@@ -118,9 +118,14 @@ class UserViewSet(ModelViewSet):
             refresh = RefreshToken.for_user(user)
             access_token = refresh.access_token
 
+            # if created:
+            #     return redirect(f'http://localhost:3000/profile?access_token={access_token}&refresh_token={refresh}')
+            # else:
+            #     return redirect(f'http://localhost:3000/?access_token={access_token}&refresh_token={refresh}')
+
             if created:
-                return redirect(f'http://localhost:3000/profile?access_token={access_token}&refresh_token={refresh}')
+                return redirect(f'/profile?access_token={access_token}&refresh_token={refresh}')
             else:
-                return redirect(f'http://localhost:3000/?access_token={access_token}&refresh_token={refresh}')
+                return redirect(f'/?access_token={access_token}&refresh_token={refresh}')
 
         return HttpResponse({}, status=status.HTTP_200_OK)
