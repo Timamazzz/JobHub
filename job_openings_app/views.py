@@ -3,6 +3,7 @@ from rest_framework import status, permissions
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.filters import SearchFilter
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
 from JobHub.utils.ModelViewSet import ModelViewSet
@@ -22,6 +23,8 @@ class JobOpeningViewSet(ModelViewSet):
     queryset = JobOpening.objects.all()
     serializer_class = JobOpeningSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    pagination_class = PageNumberPagination
+    pagination_class.page_size = 6
     filterset_class = JobOpeningFilter
     filter_backends = [DjangoFilterBackend, SearchFilter]
     search_fields = ['title', 'description', 'job_type__name', 'job_category__name', 'job_activity__name',
