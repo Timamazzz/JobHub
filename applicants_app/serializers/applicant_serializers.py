@@ -54,7 +54,7 @@ class ApplicantForJobOpeningsListSerializer(WritableNestedModelSerializer):
 
     class Meta:
         model = Applicant
-        fields = ('id', 'avatar_url')
+        fields = ('id', 'fio', 'birth_date', 'phone_number', 'avatar_url')
 
     def get_avatar_url(self, obj):
         try:
