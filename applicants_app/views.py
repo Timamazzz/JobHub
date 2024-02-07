@@ -33,3 +33,6 @@ class ApplicantViewSet(ModelViewSet):
         applicant = user.applicant_profile
         serializer = ApplicantRetrieveSerializer(applicant)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def update(self, request, *args, **kwargs):
+        print("Updating")
