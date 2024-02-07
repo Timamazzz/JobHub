@@ -32,15 +32,15 @@ class ApplicantCreateSerializer(serializers.ModelSerializer):
 
 
 class ApplicantUpdateSerializer(serializers.ModelSerializer):
-    #avatar = ApplicantCreateOrUpdateAvatarSerializer(required=False)
+    avatar = ApplicantCreateOrUpdateAvatarSerializer()
     phone_number = PhoneField()
-    avatar = serializers.DictField(child=serializers.CharField(), required=False)
 
     class Meta:
         model = Applicant
         fields = ('id', 'avatar', 'fio', 'birth_date', 'phone_number', 'email', 'resume')
 
     def create(self, validated_data):
+        print('create')
         avatar_data = validated_data.pop('avatar', None)
         applicant = Applicant.objects.create(**validated_data)
 
@@ -52,6 +52,7 @@ class ApplicantUpdateSerializer(serializers.ModelSerializer):
         return applicant
 
     def update(self, instance, validated_data):
+        print('update')
         avatar_data = validated_data.pop('avatar', None)
         if avatar_data:
             avatar_id = avatar_data.pop('id', None)
