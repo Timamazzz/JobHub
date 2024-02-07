@@ -49,7 +49,7 @@ class ApplicantUpdateSerializer(WritableNestedModelSerializer):
         fields = ('id', 'avatar', 'fio', 'birth_date', 'phone_number', 'email', 'resume')
 
 
-class ApplicantForJobOpeningsListSerializer(serializers.ModelSerializer):
+class ApplicantForJobOpeningsListSerializer(WritableNestedModelSerializer):
     avatar_url = serializers.SerializerMethodField()
 
     class Meta:
