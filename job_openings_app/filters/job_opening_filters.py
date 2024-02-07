@@ -15,4 +15,6 @@ class JobOpeningFilter(filters.FilterSet):
             'job_type': ['exact'],
             'archived': ['exact'],
             'employee_found': ['exact'],
+            'job_activity': ['in'],
+            'job_category': ['in'],
         }
