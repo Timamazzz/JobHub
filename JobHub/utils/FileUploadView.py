@@ -52,7 +52,6 @@ def save_uploaded_files(uploaded_files, path='uploads/'):
         file_data = {
             'url': url,
             'original_name': original_name,
-            'time_upload': datetime.now(),
             'extension': extension,
         }
 
