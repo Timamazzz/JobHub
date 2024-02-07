@@ -31,17 +31,22 @@ class ModelViewSet(viewsets.ModelViewSet):
     def update(self, request, *args, **kwargs):
         print('Updating model')
         partial = kwargs.pop('partial', False)
+        filename = None
+        print('request.data', request.data)
+
+        if request.data.pop('file'):
+            filename = request.data.get('file', None) if not request.data.get('file') == "" else None
+            request.data.pop('file', None)
+
+        print('request.data', request.data)
+
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
-        if request.data.pop('file'):
 
-            filename = request.data.get('file', None) if not request.data.get('file') == "" else None
-            request.data.pop('file', None)
-
-            if filename or filename == {}:
-                FileFieldUpdate(serializer.Meta.model, serializer.data['id'], filename)
+        if filename or filename == {}:
+            FileFieldUpdate(serializer.Meta.model, serializer.data['id'], filename)
 
         if getattr(instance, '_prefetched_objects_cache', None):
             # If 'prefetch_related' has been applied to a queryset, we need to
