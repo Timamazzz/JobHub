@@ -11,7 +11,15 @@ class ApplicantRetrieveAvatarSerializer(serializers.ModelSerializer):
 
 
 class ApplicantCreateOrUpdateAvatarSerializer(serializers.ModelSerializer):
-    file = serializers.CharField(max_length=1024)
+    #file = serializers.CharField(max_length=1024)
+
+    file = serializers.SerializerMethodField()
+
+    def get_file(self, obj):
+        # Получаем полный URL-адрес файла
+        if obj.file:
+            return self.context['request'].build_absolute_uri(obj.file.url)
+        return None
 
     class Meta:
         model = ApplicantAvatar
