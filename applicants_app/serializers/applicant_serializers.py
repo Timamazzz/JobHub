@@ -1,5 +1,6 @@
 import traceback
 
+from drf_writable_nested import WritableNestedModelSerializer
 from rest_framework import serializers
 from rest_framework.serializers import raise_errors_on_nested_writes
 from rest_framework.utils import model_meta
@@ -31,7 +32,7 @@ class ApplicantCreateSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ApplicantUpdateSerializer(serializers.ModelSerializer):
+class ApplicantUpdateSerializer(WritableNestedModelSerializer):
     avatar = ApplicantCreateOrUpdateAvatarSerializer()
     phone_number = PhoneField()
 
