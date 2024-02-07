@@ -11,6 +11,6 @@ router.register(r'', JobOpeningViewSet)
 
 
 urlpatterns = [
-    path('send-to-moderation/', SendToModerationAPIView.as_view()),
+    path('a/send-to-moderation/', SendToModerationAPIView.as_view()),
     path('', include(router.urls)),
 ]
