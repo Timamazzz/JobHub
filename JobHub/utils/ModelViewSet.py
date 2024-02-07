@@ -34,9 +34,9 @@ class ModelViewSet(viewsets.ModelViewSet):
         filename = None
         print('request.data', request.data)
 
-        if request.data.pop('file'):
-            filename = request.data.get('file', None) if not request.data.get('file') == "" else None
-            request.data.pop('file', None)
+        if request.data['avatar'].get('file'):
+            filename = request.data['avatar'].get('file', None) if not request.data['avatar'].get('file') == "" else None
+            request.data['avatar'].pop('file', None)
 
         print('request.data', request.data)
 
