@@ -68,7 +68,6 @@ class UserViewSet(ModelViewSet):
                 )
 
                 if created:
-                    applicant_email = email if email else None
                     applicant_profile, created = Applicant.objects.get_or_create(
                         user=user,
                         vk_id=vk_user_id,
@@ -76,7 +75,6 @@ class UserViewSet(ModelViewSet):
                             'fio': f'{first_name} {last_name}',
                             'birth_date': birth_date,
                             'phone_number': formate_phone(phone_number),
-                            'email': applicant_email,
                         }
                     )
 
