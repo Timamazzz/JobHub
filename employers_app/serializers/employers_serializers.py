@@ -11,7 +11,7 @@ class EmployerSerializer(serializers.ModelSerializer):
 
 class EmployerModerationDataSerializer(serializers.ModelSerializer):
     phone_number = PhoneField()
-    contact_person_email = serializers.EmailField(required=False, verbose_name="Email контактного лица")
+    contact_person_email = serializers.EmailField(required=False, label="Email контактного лица")
 
     class Meta:
         model = Employer
