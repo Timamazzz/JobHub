@@ -23,7 +23,8 @@ class Employer(models.Model):
 
     description = models.TextField(verbose_name="Описание", blank=True, null=True)
     site = models.URLField(null=True, verbose_name='Сайт', blank=True)
-    contact_person_email = models.EmailField(blank=True, null=True, verbose_name="Email контактного лица")
+
+    email = models.EmailField(blank=True, null=True, verbose_name="Email контактного лица")
 
     def __str__(self):
         return f"{self.name}"

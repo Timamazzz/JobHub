@@ -49,6 +49,7 @@ class SendToModerationAPIView(APIView):
                 f'Legal Address: {serializer.validated_data.get("legal_address")}\n'
                 f'Contact Person Full Name: {serializer.validated_data.get("contact_person_fio")}\n'
                 f'Phone Number: {serializer.validated_data.get("phone_number")}\n'
+                f'Contact Person Email: {serializer.validated_data.get("contact_person_email")}\n'
             )
             html_message = (
                 '<p>Data for moderation has been received:</p>'
