@@ -23,7 +23,9 @@ class EmployerLoginSerializer(serializers.Serializer):
     username = serializers.CharField(required=True, label='Логин', )
     password = PasswordField(label='Пароль',
                              help_text='Восстановление пароля',
-                             style={'tip_message': 'Здесь какая то подскзка, но я ее не знаю'}, )
+                             style={'tip_message': "Для восстановления пароля требуется связаться с администратором "
+                                                   "по электронной почте: <a href='mailto:job.ump@belregion.ru'>job.ump@belregion.ru</a> "
+                                                   "и подтвердить свою личность"})
 
     class Meta:
         model = Employer
