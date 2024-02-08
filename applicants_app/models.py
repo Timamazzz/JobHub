@@ -45,3 +45,11 @@ class Applicant(models.Model):
         null=True,
         verbose_name="ID ВКонтакте"
     )
+
+    def __str__(self):
+        return self.user.username
+
+    class Meta:
+        verbose_name = 'Соискатель'
+        verbose_name_plural = 'Соискатели'
+        app_label = 'applicants_app'

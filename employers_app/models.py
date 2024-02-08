@@ -27,3 +27,8 @@ class Employer(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+
+    class Meta:
+        verbose_name = 'Работодатель'
+        verbose_name_plural = 'Работодатели'
+        app_label = 'employers_app'
