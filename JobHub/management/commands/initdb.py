@@ -1,13 +1,12 @@
 from django.core.management.base import BaseCommand
 from tqdm import tqdm
-
 from feed_app.models import UsefulResource
 from job_openings_app.models import JobType, JobCategory, JobActivity, Municipality
 from JobHub.enums import JobTypeEnum, JobCategoryEnum, JobActivityEnum, MunicipalityEnum
 
 
 class Command(BaseCommand):
-    help = 'Initialize job data'
+    help = 'Initialize database'
 
     def handle(self, *args, **options):
         for type_enum in tqdm(JobTypeEnum, desc='Initializing Job Types'):

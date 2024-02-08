@@ -106,7 +106,7 @@ class JobOpeningViewSet(ModelViewSet):
         return Response(serializer.data)
 
     @action(detail=True, methods=['post'])
-    @action_permission_classes((IsApplicant,))
+    @action_permission_classes((IsApplicant, ))
     def respond(self, request, *args, **kwargs):
         job_opening = self.get_object()
 
