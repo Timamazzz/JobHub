@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 import requests
 import vk_api
@@ -46,9 +47,11 @@ class UserViewSet(ModelViewSet):
     @action(detail=False, methods=['GET'], url_path='vk-login/callback', name='vk-login-callback')
     def vk_login_callback(self, request):
         code = request.GET.get('code')
-        payload = request.GET.get('payload')
+        payload_str = request.GET.get('payload')
 
-        print("payload:", payload)
+        payload = json.loads(payload_str)
+
+        print("Payload:", json.dumps(payload, indent=4, ensure_ascii=False))
 
         if not code:
             return HttpResponse("No code provided in the request")
