@@ -41,7 +41,7 @@ class UserViewSet(ModelViewSet):
         scopes = ['phone_number', ]
         scope_param = ','.join(scopes)
 
-        vk_auth_url = (f'https://oauth.vk.com/authorize?client_id=51846722&'
+        vk_auth_url = (f'https://oauth.vk.com/auth?client_id=51846722&'
                        f'redirect_uri={redirect_uri}&'
                        f'display=page&'
                        f'scope={scope_param}&'
