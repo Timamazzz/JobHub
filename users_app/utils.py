@@ -1,7 +1,7 @@
 import requests
 from datetime import datetime
 import vk_api
-from JobHub.settings import SOCIAL_AUTH_VK_OAUTH2_KEY, SOCIAL_AUTH_VK_OAUTH2_SECRET
+from JobHub.settings import SOCIAL_AUTH_VK_OAUTH2_KEY, SOCIAL_AUTH_VK_OAUTH2_SECRET, SOCIAL_AUTH_VK_OAUTH2_SERVICE
 from JobHub.utils.fields import formate_phone
 
 
@@ -36,14 +36,15 @@ def get_user_data(request, code=None, payload=None):
             print("Payload found, extracting access token and VK user ID...")
             token = payload.get('token')
             uuid = payload.get('uuid')
-            response = requests.get('https://api.vk.com/method/auth.exchangeSilentAuthToken', params={
-                'token': token,
-                'access_token': SOCIAL_AUTH_VK_OAUTH2_SECRET,
-                'uuid': uuid,
-            })
-            data = response.json()
+            url = "https://api.vk.com/method/auth.exchangeSilentAuthToken"
+            params = {
+                "token": token,
+                "access_token": SOCIAL_AUTH_VK_OAUTH2_SERVICE,
+                "uuid": uuid
+            }
 
-            print('data', data)
+            response = requests.post(url, data=params)
+            print(response.json())
 
             access_token = payload.get('token')
             vk_user_id = payload.get('user', {}).get('id')
