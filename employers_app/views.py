@@ -12,7 +12,6 @@ from employers_app.models import Employer
 from employers_app.serializers.employers_serializers import EmployerSerializer, EmployerModerationDataSerializer, \
     EmployerLoginSerializer, EmployerFilterListSerializer, EmployerRetrieveSerializer
 from users_app.permissions import IsEmployer
-from rest_framework.decorators import permission_classes as action_permission_classes
 
 
 # Create your views here.
@@ -48,6 +47,7 @@ class SendToModerationAPIView(APIView):
 
             mail.send(
                 '89205731783@mail.ru',
+                'job.ump@belregion.ru',
                 settings.DEFAULT_FROM_EMAIL,
                 subject=subject,
                 message=message,

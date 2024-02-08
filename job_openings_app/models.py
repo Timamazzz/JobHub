@@ -49,7 +49,8 @@ class JobOpening(models.Model):
     salary_max = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Зарплата до')
     description = models.TextField(verbose_name='Описание')
     employer = models.ForeignKey(Employer, on_delete=models.CASCADE, verbose_name='Работодатель')
-    applicants = models.ManyToManyField(Applicant, related_name='job_applications', blank=True, verbose_name='Откликнувшиеся')
+    applicants = models.ManyToManyField(Applicant, related_name='job_applications', blank=True,
+                                        verbose_name='Откликнувшиеся')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Время создания')
     archived = models.BooleanField(default=False, verbose_name='Архивная')
     employee_found = models.BooleanField(default=False, verbose_name='Сотрудник найден')
@@ -60,4 +61,16 @@ class JobOpening(models.Model):
     class Meta:
         verbose_name = 'Вакансия'
         verbose_name_plural = 'Вакансии'
+        app_label = 'job_openings_app'
+
+
+class Municipality(models.Model):
+    name = models.CharField("Муниципальное образование", max_length=255, null=False, blank=False)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Муниципальное образование'
+        verbose_name_plural = 'Муниципальные образования'
         app_label = 'job_openings_app'

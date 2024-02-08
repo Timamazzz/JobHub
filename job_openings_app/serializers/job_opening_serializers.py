@@ -1,7 +1,8 @@
 from rest_framework import serializers
 
+from JobHub.utils.fields import PhoneField
 from applicants_app.serializers.applicant_serializers import ApplicantSerializer, ApplicantForJobOpeningsListSerializer
-from job_openings_app.models import JobOpening
+from job_openings_app.models import JobOpening, Municipality
 
 
 class JobOpeningSerializer(serializers.ModelSerializer):
@@ -51,3 +52,14 @@ class JobOpeningListFilterSerializer(serializers.ModelSerializer):
     class Meta:
         model = JobOpening
         fields = ('job_type', 'job_category', 'job_activity', 'employer', 'applicants', 'archived', 'employee_found')
+
+
+class WorkOnHolidayDataSerializer(serializers.Serializer):
+    fio = serializers.CharField(max_length=255, label='ФИО', required=True)
+    phone_number = PhoneField()
+    email = serializers.EmailField(label='Электронная почта', required=True)
+    municipality = serializers.PrimaryKeyRelatedField(queryset=Municipality.objects.all(),
+                                                      label='Муниципальное образование', required=True)
+
+    class Meta:
+        fields = '__all__'
