@@ -5,34 +5,15 @@ from JobHub.settings import SOCIAL_AUTH_VK_OAUTH2_KEY, SOCIAL_AUTH_VK_OAUTH2_SEC
 from JobHub.utils.fields import formate_phone
 
 
-def get_user_data(request, code=None, payload=None):
-    my_domain = request.build_absolute_uri('/')[:-1]
-    redirect_uri = f'{my_domain}/api/users/vk-login/callback'
-    access_token = None
-    vk_user_id = None
-
+def get_user_data(request, payload=None):
     try:
+        access_token = None
+        vk_user_id = None
+
         print("Start get_user_data function")
-        print("Received code:", code)
         print("Received payload:", payload)
 
-        if code:
-            print("Code found, fetching access token...")
-            response = requests.get('https://oauth.vk.com/access_token', params={
-                'client_id': SOCIAL_AUTH_VK_OAUTH2_KEY,
-                'client_secret': SOCIAL_AUTH_VK_OAUTH2_SECRET,
-                'redirect_uri': redirect_uri,
-                'code': code
-            })
-
-            data = response.json()
-            print("Access token response data:", data)
-            access_token = data.get('access_token')
-            vk_user_id = data.get('user_id')
-            print("Access token:", access_token)
-            print("VK user ID:", vk_user_id)
-
-        elif payload:
+        if payload:
             print("Payload found, extracting access token and VK user ID...")
             token = payload.get('token')
             uuid = payload.get('uuid')
@@ -44,11 +25,10 @@ def get_user_data(request, code=None, payload=None):
                 "uuid": uuid
             }
 
-            response = requests.post(url, data=params)
-            print(response.json())
+            response = requests.post(url, data=params).json()
 
-            access_token = payload.get('token')
-            vk_user_id = payload.get('user', {}).get('id')
+            access_token = response['response'].get('access_token')
+            vk_user_id = response['response'].get('user_id')
             print("Access token:", access_token)
             print("VK user ID:", vk_user_id)
 
