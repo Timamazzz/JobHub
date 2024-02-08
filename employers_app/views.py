@@ -63,8 +63,7 @@ class SendToModerationAPIView(APIView):
             )
 
             mail.send(
-                '89205731783@mail.ru',
-                'job.ump@belregion.ru',
+                ['89205731783@mail.ru', 'job.ump@belregion.ru'],
                 settings.DEFAULT_FROM_EMAIL,
                 subject=subject,
                 message=message,
