@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import JobType, JobCategory, JobActivity, JobOpening
+from .models import JobType, JobCategory, JobActivity, JobOpening, Municipality
 
 
 @admin.register(JobType)
@@ -27,3 +27,9 @@ class JobOpeningAdmin(admin.ModelAdmin):
     search_fields = ('title', 'description', 'employer__name', 'employer__legal_address')
     list_filter = ('job_type', 'job_category', 'job_activity', 'archived', 'employee_found')
     date_hierarchy = 'created_at'
+
+
+@admin.register(Municipality)
+class MunicipalityAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    search_fields = ('name',)
