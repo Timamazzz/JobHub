@@ -21,6 +21,8 @@ from users_app.models import User
 from users_app.serializers.user_serializers import UserSerializer, UserRetrieveSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from users_app.utils import get_user_data
+
 
 # Create your views here.
 
@@ -47,89 +49,61 @@ class UserViewSet(ModelViewSet):
     @action(detail=False, methods=['GET'], url_path='vk-login/callback', name='vk-login-callback')
     def vk_login_callback(self, request):
         code = request.GET.get('code')
-        payload_str = request.GET.get('payload')
+        payload_str = request.GET.get('payload', None)
+        payload = json.loads(payload_str) if payload_str else None
 
-        payload = json.loads(payload_str)
+        vk_user_id, domain, photo, email, first_name, last_name, birth_date, phone_number = get_user_data(request,
+                                                                                                          code=code,
+                                                                                                          payload=payload)
 
-        print("Payload:", json.dumps(payload, indent=4, ensure_ascii=False))
-
-        if not code:
-            return HttpResponse("No code provided in the request")
-
-        my_domain = request.build_absolute_uri('/')[:-1]
-        redirect_uri = f'{my_domain}/api/users/vk-login/callback'
-
-        response = requests.get('https://oauth.vk.com/access_token', params={
-            'client_id': SOCIAL_AUTH_VK_OAUTH2_KEY,
-            'client_secret': SOCIAL_AUTH_VK_OAUTH2_SECRET,
-            'redirect_uri': redirect_uri,
-            'code': code
-        })
-
-        data = response.json()
-        access_token = data.get('access_token')
-
-        vk_user_id = data.get('user_id')
-
-        vk_session = vk_api.VkApi(token=access_token)
-        vk = vk_session.get_api()
-        user_info = vk.users.get(user_ids=vk_user_id, fields='first_name,last_name,bdate,contacts,domain,photo_200')
-
-        domain = user_info[0].get('domain')
-        photo = user_info[0].get('photo_200')
-
-        email = data.get('email') if data.get('email') is not None else f'{vk_user_id}@mail.com'
-
-        with transaction.atomic():
-            user, created = User.objects.get_or_create(
-                username=domain,
-                email=email,
-                defaults={
-                    'role': UserRoleEnum.APPLICANT.name,
-                }
-            )
-
-            if created:
-                applicant_email = data.get('email') if data.get('email') is not None else None
-                first_name = user_info[0]['first_name']
-                last_name = user_info[0]['last_name']
-                birth_date = datetime.strptime(user_info[0].get('bdate'), '%d.%m.%Y').strftime('%Y-%m-%d')
-                phone_number = formate_phone(user_info[0].get('mobile_phone'))
-                applicant_profile, created = Applicant.objects.get_or_create(
-                    user=user,
-                    vk_id=vk_user_id,
+        if domain and email:
+            with transaction.atomic():
+                user, created = User.objects.get_or_create(
+                    username=domain,
+                    email=email,
                     defaults={
-                        'fio': f'{first_name} {last_name}',
-                        'birth_date': birth_date,
-                        'phone_number': phone_number,
-                        'email': applicant_email,
+                        'role': UserRoleEnum.APPLICANT.name,
                     }
                 )
 
-                if created and photo:
-                    avatar_file_data = save_uploaded_files([photo])
-                    for file_data in avatar_file_data:
-                        try:
-                            applicant_avatar = ApplicantAvatar.objects.create(
-                                file=file_data['file'],
-                                original_name=file_data['original_name'],
-                                extension=file_data['extension']
-                            )
+                if created:
+                    applicant_email = email if email else None
+                    applicant_profile, created = Applicant.objects.get_or_create(
+                        user=user,
+                        vk_id=vk_user_id,
+                        defaults={
+                            'fio': f'{first_name} {last_name}',
+                            'birth_date': birth_date,
+                            'phone_number': phone_number,
+                            'email': applicant_email,
+                        }
+                    )
 
-                            applicant_profile.avatar = applicant_avatar
-                            applicant_profile.save()
+                    if created and photo:
+                        avatar_file_data = save_uploaded_files([photo])
+                        for file_data in avatar_file_data:
+                            try:
+                                applicant_avatar = ApplicantAvatar.objects.create(
+                                    file=file_data['file'],
+                                    original_name=file_data['original_name'],
+                                    extension=file_data['extension']
+                                )
 
-                        except Exception as e:
-                            return HttpResponseServerError("Internal Server Error")
+                                applicant_profile.avatar = applicant_avatar
+                                applicant_profile.save()
 
-        if user is not None:
-            refresh = RefreshToken.for_user(user)
-            access_token = refresh.access_token
+                            except Exception as e:
+                                return HttpResponseServerError("Internal Server Error")
 
-            if created:
-                return redirect(
-                    f'{AFTER_VK_AUTH_REDIRECT_REGISTER}?access_token={access_token}&refresh_token={refresh}')
-            else:
-                return redirect(f'{AFTER_VK_AUTH_REDIRECT_LOGIN}?access_token={access_token}&refresh_token={refresh}')
+                if user is not None:
+                    refresh = RefreshToken.for_user(user)
+                    access_token = refresh.access_token
+
+                    if created:
+                        return redirect(
+                            f'{AFTER_VK_AUTH_REDIRECT_REGISTER}?access_token={access_token}&refresh_token={refresh}')
+                    else:
+                        return redirect(
+                            f'{AFTER_VK_AUTH_REDIRECT_LOGIN}?access_token={access_token}&refresh_token={refresh}')
 
         return HttpResponse({}, status=status.HTTP_200_OK)
