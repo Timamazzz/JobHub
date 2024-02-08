@@ -38,6 +38,7 @@ def get_user_data(request, code=None, payload=None):
             uuid = payload.get('uuid')
             url = "https://api.vk.com/method/auth.exchangeSilentAuthToken"
             params = {
+                "v": "5.199",
                 "token": token,
                 "access_token": SOCIAL_AUTH_VK_OAUTH2_SERVICE,
                 "uuid": uuid
