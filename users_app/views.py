@@ -1,4 +1,5 @@
 import json
+import uuid
 from datetime import datetime
 import requests
 import vk_api
@@ -35,13 +36,20 @@ class UserViewSet(ModelViewSet):
 
     @action(detail=False, methods=['GET'], url_path='vk-login')
     def vk_login(self, request):
+
         my_domain = request.build_absolute_uri('/')[:-1]
         redirect_uri = f'{my_domain}/api/users/vk-login/callback'
+        uuid_str = str(uuid.uuid4())
+        app_id = SOCIAL_AUTH_VK_OAUTH2_KEY
+        redirect_state = 'your_app_state'
 
-        scopes = ['phone_number', ]
+        scopes = ['phone_number', 'email']
         scope_param = ','.join(scopes)
 
-        vk_auth_url = f'https://oauth.vk.com/authorize?client_id=51846722&redirect_uri={redirect_uri}&display=page&scope={scope_param}'
+        query = f'uuid={uuid_str}&app_id={app_id}&response_type=silent_token&redirect_uri={redirect_uri}&redirect_state={redirect_state}'
+        vk_auth_url = f'https://id.vk.com/auth?{query}'
+
+        #vk_auth_url = f'https://oauth.vk.com/authorize?client_id=51846722&redirect_uri={redirect_uri}&display=page&scope={scope_param}'
 
         response_data = {'vk_auth_url': vk_auth_url}
         return JsonResponse(response_data, status=status.HTTP_200_OK)
