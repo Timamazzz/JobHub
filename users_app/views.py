@@ -48,6 +48,10 @@ class UserViewSet(ModelViewSet):
         print("Request GET parameters:", request.GET)
 
         code = request.GET.get('code')
+        payload = request.GET.get('payload')
+
+        print("payload:", payload)
+
         if not code:
             return HttpResponse("No code provided in the request")
 
