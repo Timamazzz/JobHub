@@ -49,6 +49,15 @@ class Applicant(models.Model):
     def __str__(self):
         return self.user.username
 
+    def is_profile_complete(self):
+        return all([
+            self.fio,
+            self.birth_date,
+            self.phone_number,
+            self.email,
+            self.resume
+        ])
+
     class Meta:
         verbose_name = 'Соискатель'
         verbose_name_plural = 'Соискатели'

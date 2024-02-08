@@ -18,7 +18,7 @@ from job_openings_app.serializers.job_activity_serializers import JobActivitySer
 from job_openings_app.serializers.job_category_serializers import JobCategorySerializer, JobCategoryListSerializer
 from job_openings_app.serializers.job_opening_serializers import JobOpeningSerializer, JobOpeningListSerializer, \
     JobOpeningCreateUpdateSerializer, JobOpeningListFilterSerializer, WorkOnHolidayDataSerializer
-from users_app.permissions import IsEmployer, IsApplicant
+from users_app.permissions import IsEmployer, IsApplicant, IsApplicantVerify
 from rest_framework.decorators import permission_classes as action_permission_classes
 
 
@@ -106,7 +106,7 @@ class JobOpeningViewSet(ModelViewSet):
         return Response(serializer.data)
 
     @action(detail=True, methods=['post'])
-    @action_permission_classes((IsApplicant, ))
+    @action_permission_classes((IsApplicantVerify, ))
     def respond(self, request, *args, **kwargs):
         job_opening = self.get_object()
 
@@ -115,6 +115,35 @@ class JobOpeningViewSet(ModelViewSet):
 
         if job_opening.applicants.filter(id=applicant.id).exists():
             return Response({"message": "Вы уже откликнулись на эту вакансию."}, status=status.HTTP_400_BAD_REQUEST)
+
+        subject = f'Response to the vacancy: {job_opening.title}'
+        message = (
+            f'Applicant Data:\n'
+            f'Full Name: {applicant.fio}\n'
+            f'Birth Date: {applicant.birth_date}\n'
+            f'Phone Number: {applicant.phone_number}\n'
+            f'Email: {applicant.email}\n'
+            f'Resume: {applicant.resume}\n'
+        )
+        html_message = (
+            f'<p><strong>Applicant Data:</strong></p>'
+            f'<p><strong>Full Name:</strong> {applicant.fio}</p>'
+            f'<p><strong>Birth Date:</strong> {applicant.birth_date}</p>'
+            f'<p><strong>Phone Number:</strong> {applicant.phone_number}</p>'
+            f'<p><strong>Email:</strong> {applicant.email}</p>'
+            f'<p><strong>Resume:</strong> {applicant.resume}</p>'
+        )
+
+        mail.send(
+            '89205731783@mail.ru',
+            'job.ump@belregion.ru',
+            job_opening.employer.email,
+            settings.DEFAULT_FROM_EMAIL,
+            subject=subject,
+            message=message,
+            html_message=html_message,
+            priority='now'
+        )
 
         job_opening.applicants.add(applicant)
         job_opening.save()
@@ -149,8 +178,22 @@ class WorkOnHolidayAPIView(APIView):
         serializer = WorkOnHolidayDataSerializer(data=request.data)
         if serializer.is_valid():
             subject = 'Work on holiday'
-            message = f'Data has been received:\n\n{serializer.data}'
-            html_message = f'<p>Data has been received:</p><pre>{serializer.data}</pre>'
+            message = (
+                'Data has been received:\n\n'
+                f'Full Name: {serializer.data.get("fio")}\n'
+                f'Phone Number: {serializer.data.get("phone_number")}\n'
+                f'Email: {serializer.data.get("email")}\n'
+                f'Municipality: {serializer.data.get("municipality")}\n'
+            )
+            html_message = (
+                '<p>Data has been received:</p>'
+                '<pre>'
+                f'<strong>Full Name:</strong> {serializer.data.get("fio")}\n'
+                f'<strong>Phone Number:</strong> {serializer.data.get("phone_number")}\n'
+                f'<strong>Email:</strong> {serializer.data.get("email")}\n'
+                f'<strong>Municipality:</strong> {serializer.data.get("municipality")}\n'
+                '</pre>'
+            )
 
             mail.send(
                 '89205731783@mail.ru',

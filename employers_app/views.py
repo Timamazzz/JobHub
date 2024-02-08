@@ -42,8 +42,24 @@ class SendToModerationAPIView(APIView):
         serializer = EmployerModerationDataSerializer(data=request.data)
         if serializer.is_valid():
             subject = 'Data for Moderation'
-            message = f'Data for moderation has been received:\n\n{serializer.data}'
-            html_message = f'<p>Data for moderation has been received:</p><pre>{serializer.data}</pre>'
+            message = (
+                'Data for moderation has been received:\n\n'
+                f'Company Name: {serializer.validated_data.get("name")}\n'
+                f'INN: {serializer.validated_data.get("inn")}\n'
+                f'Legal Address: {serializer.validated_data.get("legal_address")}\n'
+                f'Contact Person Full Name: {serializer.validated_data.get("contact_person_fio")}\n'
+                f'Phone Number: {serializer.validated_data.get("phone_number")}\n'
+            )
+            html_message = (
+                '<p>Data for moderation has been received:</p>'
+                '<pre>'
+                f'<strong>Company Name:</strong> {serializer.validated_data.get("name")}\n'
+                f'<strong>INN:</strong> {serializer.validated_data.get("inn")}\n'
+                f'<strong>Legal Address:</strong> {serializer.validated_data.get("legal_address")}\n'
+                f'<strong>Contact Person Full Name:</strong> {serializer.validated_data.get("contact_person_fio")}\n'
+                f'<strong>Phone Number:</strong> {serializer.validated_data.get("phone_number")}\n'
+                '</pre>'
+            )
 
             mail.send(
                 '89205731783@mail.ru',
