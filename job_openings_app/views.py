@@ -26,13 +26,14 @@ from rest_framework.decorators import permission_classes as action_permission_cl
 class JobOpeningViewSet(ModelViewSet):
     queryset = JobOpening.objects.all()
     serializer_class = JobOpeningSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly | IsApplicantVerify | IsEmployer]
     pagination_class = PageNumberPagination
     pagination_class.page_size = 6
     filterset_class = JobOpeningFilter
     filter_backends = [DjangoFilterBackend, SearchFilter]
     search_fields = ['title', 'description', 'job_type__name', 'job_category__name', 'job_activity__name',
                      'employer__name', 'employer__legal_address']
+
     serializer_list = {
         'list': JobOpeningListSerializer,
         'create': JobOpeningCreateUpdateSerializer,
@@ -64,7 +65,6 @@ class JobOpeningViewSet(ModelViewSet):
             raise ValidationError("User does not have associated Employer")
 
     @action(detail=True, methods=['post'], url_path='found-applicants')
-    @action_permission_classes((IsEmployer,))
     def found_applicants(self, request, pk=None):
         job_opening = self.get_object()
         job_opening.archived = True
@@ -74,7 +74,6 @@ class JobOpeningViewSet(ModelViewSet):
         return Response({'detail': 'Applicants found for the job opening.'}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['post'], url_path='move-to-archive')
-    @action_permission_classes((IsEmployer,))
     def move_to_archive(self, request, pk=None):
         job_opening = self.get_object()
         job_opening.archived = True
@@ -106,7 +105,6 @@ class JobOpeningViewSet(ModelViewSet):
         return Response(serializer.data)
 
     @action(detail=True, methods=['post'])
-    @action_permission_classes((IsApplicantVerify, ))
     def respond(self, request, *args, **kwargs):
         job_opening = self.get_object()
 
