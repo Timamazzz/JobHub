@@ -34,6 +34,17 @@ def get_user_data(request, code=None, payload=None):
 
         elif payload:
             print("Payload found, extracting access token and VK user ID...")
+            token = payload.get('token')
+            uuid = payload.get('uuid')
+            response = requests.get('https://api.vk.com/method/auth.exchangeSilentAuthToken', params={
+                'token': token,
+                'access_token': SOCIAL_AUTH_VK_OAUTH2_SECRET,
+                'uuid': uuid,
+            })
+            data = response.json()
+
+            print('data', data)
+
             access_token = payload.get('token')
             vk_user_id = payload.get('user', {}).get('id')
             print("Access token:", access_token)
