@@ -5,6 +5,9 @@ from JobHub.utils.validators import MaskValidator
 
 
 def formate_phone(phone):
+    if not phone:
+        return None
+
     digits_only = ''.join(filter(lambda x: x.isdigit(), phone))
 
     if len(digits_only) == 11 and digits_only.startswith('8'):

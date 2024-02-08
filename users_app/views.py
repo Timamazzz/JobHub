@@ -75,7 +75,7 @@ class UserViewSet(ModelViewSet):
                         defaults={
                             'fio': f'{first_name} {last_name}',
                             'birth_date': birth_date,
-                            'phone_number': phone_number,
+                            'phone_number': formate_phone(phone_number),
                             'email': applicant_email,
                         }
                     )
