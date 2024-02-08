@@ -41,14 +41,7 @@ class UserViewSet(ModelViewSet):
         scopes = ['phone_number', ]
         scope_param = ','.join(scopes)
 
-        #vk_auth_url = f'https://oauth.vk.com/authorize?client_id=51846722&redirect_uri={redirect_uri}&display=page&scope={scope_param}'
-        vk_auth_url = (f'https://id.vk.com/auth/?'
-                       f'uuid={123}&'
-                       f'appId=51846722&'
-                       f'response_type=silent_token&'
-                       f'redirect_uri={redirect_uri}&'
-                       f'redirect_state={123}&'
-                       f'scope={scope_param}')
+        vk_auth_url = f'https://oauth.vk.com/authorize?client_id=51846722&redirect_uri={redirect_uri}&display=page&scope={scope_param}'
 
         response_data = {'vk_auth_url': vk_auth_url}
         return JsonResponse(response_data, status=status.HTTP_200_OK)
