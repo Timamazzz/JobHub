@@ -45,8 +45,6 @@ class UserViewSet(ModelViewSet):
 
     @action(detail=False, methods=['GET'], url_path='vk-login/callback', name='vk-login-callback')
     def vk_login_callback(self, request):
-        print("Request GET parameters:", request.GET)
-
         code = request.GET.get('code')
         payload = request.GET.get('payload')
 
