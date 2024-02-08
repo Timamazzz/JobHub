@@ -41,25 +41,22 @@ class SendToModerationAPIView(APIView):
     def post(self, request):
         serializer = EmployerModerationDataSerializer(data=request.data)
         if serializer.is_valid():
-            subject = 'Data for Moderation'
+            subject = 'Регистрация нового работодателя (rabota.belregion.ru)'
             message = (
-                'Data for moderation has been received:\n\n'
-                f'Company Name: {serializer.validated_data.get("name")}\n'
-                f'INN: {serializer.validated_data.get("inn")}\n'
-                f'Legal Address: {serializer.validated_data.get("legal_address")}\n'
-                f'Contact Person Full Name: {serializer.validated_data.get("contact_person_fio")}\n'
-                f'Phone Number: {serializer.validated_data.get("phone_number")}\n'
-                f'Contact Person Email: {serializer.validated_data.get("contact_person_email")}\n'
+                f'Наименование: {serializer.validated_data.get("name")}\n'
+                f'ИНН: {serializer.validated_data.get("inn")}\n'
+                f'Ул {serializer.validated_data.get("legal_address")}\n'
+                f'{serializer.validated_data.get("contact_person_fio")}\n'
+                f'{serializer.validated_data.get("phone_number")}\n'
+                f'{serializer.validated_data.get("contact_person_email")}\n'
             )
             html_message = (
-                '<p>Data for moderation has been received:</p>'
-                '<pre>'
-                f'<strong>Company Name:</strong> {serializer.validated_data.get("name")}\n'
-                f'<strong>INN:</strong> {serializer.validated_data.get("inn")}\n'
-                f'<strong>Legal Address:</strong> {serializer.validated_data.get("legal_address")}\n'
-                f'<strong>Contact Person Full Name:</strong> {serializer.validated_data.get("contact_person_fio")}\n'
-                f'<strong>Phone Number:</strong> {serializer.validated_data.get("phone_number")}\n'
-                '</pre>'
+                f'<p><strong>Наименование:</strong> {serializer.validated_data.get("name")}</p>'
+                f'<p><strong>ИНН:</strong> {serializer.validated_data.get("inn")}</p>'
+                f'<p><strong>Ул {serializer.validated_data.get("legal_address")}</strong></p>'
+                f'<p>{serializer.validated_data.get("contact_person_fio")}</p>'
+                f'<p>{serializer.validated_data.get("phone_number")}</p>'
+                f'<p>{serializer.validated_data.get("contact_person_email")}</p>'
             )
 
             mail.send(

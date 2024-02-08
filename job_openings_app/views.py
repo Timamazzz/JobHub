@@ -13,7 +13,7 @@ from JobHub import settings
 from JobHub.utils.ModelViewSet import ModelViewSet
 from employers_app.models import Employer
 from job_openings_app.filters.job_opening_filters import JobOpeningFilter
-from job_openings_app.models import JobOpening, JobCategory, JobActivity
+from job_openings_app.models import JobOpening, JobCategory, JobActivity, Municipality
 from job_openings_app.serializers.job_activity_serializers import JobActivitySerializer, JobActivityListSerializer
 from job_openings_app.serializers.job_category_serializers import JobCategorySerializer, JobCategoryListSerializer
 from job_openings_app.serializers.job_opening_serializers import JobOpeningSerializer, JobOpeningListSerializer, \
@@ -117,22 +117,28 @@ class JobOpeningViewSet(ModelViewSet):
         if job_opening.applicants.filter(id=applicant.id).exists():
             return Response({"message": "Вы уже откликнулись на эту вакансию."}, status=status.HTTP_400_BAD_REQUEST)
 
-        subject = f'Response to the vacancy: {job_opening.title}'
+        subject = f'На вашу вакансию поступил отклик (rabota.belregion.ru)'
         message = (
-            f'Applicant Data:\n'
-            f'Full Name: {applicant.fio}\n'
-            f'Birth Date: {applicant.birth_date}\n'
-            f'Phone Number: {applicant.phone_number}\n'
+            f'{job_opening.title}\n'
+            f'Имя: {applicant.fio}\n'
+            f'Дата рождения: {applicant.birth_date}\n'
+            f'Телефон: {applicant.phone_number}\n'
             f'Email: {applicant.email}\n'
-            f'Resume: {applicant.resume}\n'
+            f'Резюме: {applicant.resume}\n'
+            'Это письмо отправлено автоматически. Пожалуйста, не отвечайте на него.\n\n'
+            'УВЕДОМЛЕНИЕ О КОНФИДЕНЦИАЛЬНОСТИ: Это электронное сообщение и любые документы, приложенные к нему, содержат конфиденциальную информацию. Настоящим уведомляем Вас о том, что если это сообщение не предназначено Вам, использование, копирование, распространение информации, содержащейся в настоящем сообщении, а также осуществление любых действий на основе этой информации, строго запрещено. Если Вы получили это сообщение по ошибке, пожалуйста, сообщите об этом отправителю по электронной почте и удалите это сообщение.'
         )
         html_message = (
-            f'<p><strong>Applicant Data:</strong></p>'
-            f'<p><strong>Full Name:</strong> {applicant.fio}</p>'
-            f'<p><strong>Birth Date:</strong> {applicant.birth_date}</p>'
-            f'<p><strong>Phone Number:</strong> {applicant.phone_number}</p>'
+            f'<p><strong>{job_opening.title}</strong></p>'
+            f'<p><strong>Имя:</strong> {applicant.fio}</p>'
+            f'<p><strong>Дата рождения:</strong> {applicant.birth_date}</p>'
+            f'<p><strong>Телефон:</strong> {applicant.phone_number}</p>'
             f'<p><strong>Email:</strong> {applicant.email}</p>'
-            f'<p><strong>Resume:</strong> {applicant.resume}</p>'
+            f'<p><strong>Резюме:</strong> {applicant.resume}</p>'
+            '<p><br></p>'
+            '<p>Это письмо отправлено автоматически. Пожалуйста, не отвечайте на него.</p>'
+            '<p><br></p>'
+            '<p><strong>УВЕДОМЛЕНИЕ О КОНФИДЕНЦИАЛЬНОСТИ:</strong> Это электронное сообщение и любые документы, приложенные к нему, содержат конфиденциальную информацию. Настоящим уведомляем Вас о том, что если это сообщение не предназначено Вам, использование, копирование, распространение информации, содержащейся в настоящем сообщении, а также осуществление любых действий на основе этой информации, строго запрещено. Если Вы получили это сообщение по ошибке, пожалуйста, сообщите об этом отправителю по электронной почте и удалите это сообщение.</p>'
         )
 
         mail.send(
@@ -176,26 +182,30 @@ class WorkOnHolidayAPIView(APIView):
     def post(self, request):
         serializer = WorkOnHolidayDataSerializer(data=request.data)
         if serializer.is_valid():
-            subject = 'Work on holiday'
+            subject = 'Заявка работа на каникулах (rabota.belregion.ru)'
             message = (
-                'Data has been received:\n\n'
-                f'Full Name: {serializer.data.get("fio")}\n'
-                f'Phone Number: {serializer.data.get("phone_number")}\n'
-                f'Email: {serializer.data.get("email")}\n'
-                f'Municipality: {serializer.data.get("municipality")}\n'
+                f'Соискатель:\n'
+                f'{serializer.data.get("fio")}\n'
+                f'{serializer.data.get("phone_number")}\n'
+                f'{serializer.data.get("email")}\n'
+                f'{serializer.data.get("municipality")}\n\n'
+                'Это письмо отправлено автоматически. Пожалуйста, не отвечайте на него.\n\n'
+                'УВЕДОМЛЕНИЕ О КОНФИДЕНЦИАЛЬНОСТИ: Это электронное сообщение и любые документы, приложенные к нему, содержат конфиденциальную информацию. Настоящим уведомляем Вас о том, что если это сообщение не предназначено Вам, использование, копирование, распространение информации, содержащейся в настоящем сообщении, а также осуществление любых действий на основе этой информации, строго запрещено. Если Вы получили это сообщение по ошибке, пожалуйста, сообщите об этом отправителю по электронной почте и удалите это сообщение.'
             )
             html_message = (
-                '<p>Data has been received:</p>'
-                '<pre>'
-                f'<strong>Full Name:</strong> {serializer.data.get("fio")}\n'
-                f'<strong>Phone Number:</strong> {serializer.data.get("phone_number")}\n'
-                f'<strong>Email:</strong> {serializer.data.get("email")}\n'
-                f'<strong>Municipality:</strong> {serializer.data.get("municipality")}\n'
-                '</pre>'
+                f'<p><strong>Соискатель:</strong></p>'
+                f'<p>{serializer.data.get("fio")}</p>'
+                f'<p>{serializer.data.get("phone_number")}</p>'
+                f'<p>{serializer.data.get("email")}</p>'
+                f'<p>{Municipality.objects.get(id=serializer.data.get("municipality"))}</p>'
+                '<p><br></p>'
+                '<p>Это письмо отправлено автоматически. Пожалуйста, не отвечайте на него.</p>'
+                '<p><br></p>'
+                '<p><strong>УВЕДОМЛЕНИЕ О КОНФИДЕНЦИАЛЬНОСТИ:</strong> Это электронное сообщение и любые документы, приложенные к нему, содержат конфиденциальную информацию. Настоящим уведомляем Вас о том, что если это сообщение не предназначено Вам, использование, копирование, распространение информации, содержащейся в настоящем сообщении, а также осуществление любых действий на основе этой информации, строго запрещено. Если Вы получили это сообщение по ошибке, пожалуйста, сообщите об этом отправителю по электронной почте и удалите это сообщение.</p>'
             )
 
             mail.send(
-                ['89205731783@mail.ru', 'job.ump@belregion.ru'],
+                ['89205731783@mail.ru', 's.soprov@yandex.ru', 'job.ump@belregion.ru'],
                 settings.DEFAULT_FROM_EMAIL,
                 subject=subject,
                 message=message,
