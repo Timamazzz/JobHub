@@ -12,10 +12,11 @@ class EmployerSerializer(serializers.ModelSerializer):
 class EmployerModerationDataSerializer(serializers.ModelSerializer):
     phone_number = PhoneField()
     contact_person_email = serializers.EmailField(required=False, label="Email контактного лица")
+    contact_person_fio = serializers.CharField(max_length=255, label="ФИО контактного лица")
 
     class Meta:
         model = Employer
-        fields = ('name', 'inn', 'legal_address', 'contact_person_fio', 'phone_number', 'contact_person_email')
+        fields = ('name', 'inn', 'legal_address', 'contact_person_fio', 'contact_person_fio', 'phone_number', 'contact_person_email')
 
 
 class EmployerLoginSerializer(serializers.Serializer):

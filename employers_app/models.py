@@ -10,7 +10,7 @@ class Employer(models.Model):
     name = models.CharField(max_length=255, verbose_name="Название компании")
     inn = models.CharField(max_length=12, unique=True, verbose_name="ИНН")
     legal_address = models.TextField(verbose_name="Юридический адрес")
-    contact_person_fio = models.CharField(max_length=255, verbose_name="ФИО контактного лица")
+
 
     phone_number = models.CharField(
         validators=[PhoneNumberValidator()],
@@ -24,7 +24,7 @@ class Employer(models.Model):
     description = models.TextField(verbose_name="Описание", blank=True, null=True)
     site = models.URLField(null=True, verbose_name='Сайт', blank=True)
 
-    email = models.EmailField(blank=True, null=True, verbose_name="Email контактного лица")
+    email = models.EmailField(blank=True, null=True, verbose_name="Email")
 
     def __str__(self):
         return f"{self.name}"
