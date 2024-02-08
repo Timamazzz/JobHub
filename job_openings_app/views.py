@@ -111,6 +111,9 @@ class JobOpeningViewSet(ModelViewSet):
         user = request.user
         applicant = user.applicant_profile
 
+        if not user.applicant_profile.is_profile_complete():
+            return Response({"message": "Заполните все данные профиля"}, status=status.HTTP_403_FORBIDDEN)
+
         if job_opening.applicants.filter(id=applicant.id).exists():
             return Response({"message": "Вы уже откликнулись на эту вакансию."}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -133,9 +136,7 @@ class JobOpeningViewSet(ModelViewSet):
         )
 
         mail.send(
-            '89205731783@mail.ru',
-            'job.ump@belregion.ru',
-            job_opening.employer.email,
+            ['89205731783@mail.ru', 'job.ump@belregion.ru',  job_opening.employer.email],
             settings.DEFAULT_FROM_EMAIL,
             subject=subject,
             message=message,
@@ -194,8 +195,7 @@ class WorkOnHolidayAPIView(APIView):
             )
 
             mail.send(
-                '89205731783@mail.ru',
-                'job.ump@belregion.ru',
+                ['89205731783@mail.ru', 'job.ump@belregion.ru'],
                 settings.DEFAULT_FROM_EMAIL,
                 subject=subject,
                 message=message,
