@@ -45,8 +45,8 @@ class JobOpening(models.Model):
     job_category = models.ForeignKey(JobCategory, on_delete=models.CASCADE, verbose_name='Вид')
     job_activity = models.ForeignKey(JobActivity, on_delete=models.CASCADE, verbose_name='Род деятельности')
     title = models.CharField(max_length=255, verbose_name='Название вакансии')
-    salary_min = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Зарплата от')
-    salary_max = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Зарплата до')
+    salary_min = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='Зарплата от')
+    salary_max = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='Зарплата до')
     description = models.TextField(verbose_name='Описание')
     employer = models.ForeignKey(Employer, on_delete=models.CASCADE, verbose_name='Работодатель')
     applicants = models.ManyToManyField(Applicant, related_name='job_applications', blank=True,
