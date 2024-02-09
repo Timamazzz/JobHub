@@ -14,6 +14,7 @@ from JobHub.utils.ModelViewSet import ModelViewSet
 from employers_app.models import Employer
 from job_openings_app.filters.job_opening_filters import JobOpeningFilter
 from job_openings_app.models import JobOpening, JobCategory, JobActivity, Municipality
+from job_openings_app.pagination import CustomPagination
 from job_openings_app.serializers.job_activity_serializers import JobActivitySerializer, JobActivityListSerializer
 from job_openings_app.serializers.job_category_serializers import JobCategorySerializer, JobCategoryListSerializer
 from job_openings_app.serializers.job_opening_serializers import JobOpeningSerializer, JobOpeningListSerializer, \
@@ -27,7 +28,7 @@ class JobOpeningViewSet(ModelViewSet):
     queryset = JobOpening.objects.all()
     serializer_class = JobOpeningSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly | IsApplicantVerify | IsEmployer]
-    pagination_class = PageNumberPagination
+    pagination_class = CustomPagination
     pagination_class.page_size = 6
     filterset_class = JobOpeningFilter
     filter_backends = [DjangoFilterBackend, SearchFilter]
