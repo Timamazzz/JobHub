@@ -25,7 +25,7 @@ from rest_framework.decorators import permission_classes as action_permission_cl
 
 # Create your views here.
 class JobOpeningViewSet(ModelViewSet):
-    queryset = JobOpening.objects.all().order_by('-created_at')
+    queryset = JobOpening.objects.all()
     serializer_class = JobOpeningSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly | IsApplicantVerify | IsEmployer]
     pagination_class = CustomPagination
