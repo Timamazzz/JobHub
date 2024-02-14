@@ -48,7 +48,12 @@ class ApplicantUpdateSerializer(WritableNestedModelSerializer):
         model = Applicant
         fields = ('id', 'avatar', 'fio', 'birth_date', 'phone_number', 'email', 'resume')
         extra_kwargs = {
-            'email': {'required': True}
+            'avatar': {'required': True},
+            'fio': {'required': True},
+            'birth_date': {'required': True},
+            'phone_number': {'required': True},
+            'email': {'required': True},
+            'resume': {'required': True},
         }
 
 
