@@ -47,6 +47,9 @@ class ApplicantUpdateSerializer(WritableNestedModelSerializer):
     class Meta:
         model = Applicant
         fields = ('id', 'avatar', 'fio', 'birth_date', 'phone_number', 'email', 'resume')
+        extra_kwargs = {
+            'email': {'required': True}
+        }
 
 
 class ApplicantForJobOpeningsListSerializer(WritableNestedModelSerializer):
