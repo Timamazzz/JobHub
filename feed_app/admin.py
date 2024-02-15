@@ -26,9 +26,9 @@ class EventAdmin(admin.ModelAdmin):
 
 @admin.register(Excursion)
 class ExcursionAdmin(admin.ModelAdmin):
-    list_display = ('title', 'excursion_time', 'text')
-    search_fields = ('excursion_time', 'text', 'title')
-    list_filter = ('excursion_time',)
+    list_display = ('title', 'is_open', 'text')
+    search_fields = ('text', 'title')
+    list_filter = ('is_open',)
     inlines = [PhotoExcursionInline]
     exclude = ['publish_time']
 
