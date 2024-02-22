@@ -40,10 +40,24 @@ class JobActivity(models.Model):
         app_label = 'job_openings_app'
 
 
+class Municipality(models.Model):
+    name = models.CharField("Муниципальное образование", max_length=255, null=False, blank=False)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Муниципальное образование'
+        verbose_name_plural = 'Муниципальные образования'
+        app_label = 'job_openings_app'
+
+
 class JobOpening(models.Model):
     job_type = models.ForeignKey(JobType, on_delete=models.CASCADE, verbose_name='Тип')
     job_category = models.ForeignKey(JobCategory, on_delete=models.CASCADE, verbose_name='Вид')
     job_activity = models.ForeignKey(JobActivity, on_delete=models.CASCADE, verbose_name='Род деятельности')
+    municipality = models.ForeignKey(Municipality, on_delete=models.CASCADE, verbose_name='Муниципальное образование',
+                                     null=True, blank=True)
     title = models.CharField(max_length=255, verbose_name='Название вакансии')
     salary_min = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='Зарплата от')
     salary_max = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name='Зарплата до')
@@ -61,16 +75,4 @@ class JobOpening(models.Model):
     class Meta:
         verbose_name = 'Вакансия'
         verbose_name_plural = 'Вакансии'
-        app_label = 'job_openings_app'
-
-
-class Municipality(models.Model):
-    name = models.CharField("Муниципальное образование", max_length=255, null=False, blank=False)
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = 'Муниципальное образование'
-        verbose_name_plural = 'Муниципальные образования'
         app_label = 'job_openings_app'

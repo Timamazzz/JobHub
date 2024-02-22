@@ -51,7 +51,7 @@ class JobOpeningCreateUpdateSerializer(serializers.ModelSerializer):
 class JobOpeningListFilterSerializer(serializers.ModelSerializer):
     class Meta:
         model = JobOpening
-        fields = ('job_type', 'job_category', 'job_activity', 'employer', 'applicants', 'archived', 'employee_found')
+        fields = ('job_type', 'job_category', 'job_activity', 'municipality', 'employer', 'applicants', 'archived', 'employee_found')
 
 
 class WorkOnHolidayDataSerializer(serializers.Serializer):

@@ -15,6 +15,7 @@ class JobOpeningFilter(filters.FilterSet):
             'employer': ['exact'],
             'applicants': ['exact'],
             'job_type': ['exact'],
+            'municipality': ['exact'],
             'archived': ['exact'],
             'employee_found': ['exact'],
         }
