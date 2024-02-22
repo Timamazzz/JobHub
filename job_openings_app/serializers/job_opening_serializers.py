@@ -15,7 +15,7 @@ class JobOpeningListSerializer(serializers.ModelSerializer):
     job_type = serializers.CharField(source='job_type.name')
     job_category = serializers.CharField(source='job_category.name')
     job_activity = serializers.CharField(source='job_activity.name')
-    municipality = serializers.CharField(source='municipality.name')
+    municipality = serializers.CharField(source='municipality.name', allow_null=True)
     employer_name = serializers.CharField(source='employer.name')
     employer_description = serializers.CharField(source='employer.description')
     employer_address = serializers.CharField(source='employer.legal_address')
