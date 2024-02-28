@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'employers_app',
     'applicants_app',
     'job_openings_app',
+    'django_celery_beat'
 ]
 
 MIDDLEWARE = [
