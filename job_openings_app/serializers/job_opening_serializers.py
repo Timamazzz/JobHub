@@ -33,7 +33,7 @@ class JobOpeningListSerializer(serializers.ModelSerializer):
 class JobOpeningCreateUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = JobOpening
-        fields = ('job_type', 'job_category', 'job_activity', 'title', 'salary_min', 'salary_max', 'description',
+        fields = ('municipality', 'job_type', 'job_category', 'job_activity', 'title', 'salary_min', 'salary_max', 'description',
                   'employer')
         extra_kwargs = {
             'salary_min': {
@@ -45,6 +45,7 @@ class JobOpeningCreateUpdateSerializer(serializers.ModelSerializer):
                 'style': {'placeholder': '₽', }
             },
             'employer': {'required': False, 'allow_null': True},
+            'municipality': {'required': True},
         }
 
 
