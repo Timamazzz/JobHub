@@ -15,7 +15,7 @@ class ExcursionListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Excursion
-        fields = '__all__'
+        exclude=['publish_time', ]
 
     def get_preview_image(self, excursion):
         preview_image = ExcursionImage.objects.filter(excursion=excursion, is_preview=True).first()
