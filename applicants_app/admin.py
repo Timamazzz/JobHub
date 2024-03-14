@@ -7,6 +7,7 @@ class ApplicantAdmin(admin.ModelAdmin):
     list_display = ('user', 'fio', 'birth_date', 'phone_number', 'email', 'vk_id')
     search_fields = ('user__username', 'fio', 'phone_number', 'email', 'vk_id')
     list_filter = ('birth_date',)
+    actions = ['export_to_excel']
 
     def export_to_excel(self, request, queryset):
         wb = openpyxl.Workbook()

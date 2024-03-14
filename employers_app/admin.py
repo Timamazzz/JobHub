@@ -9,6 +9,7 @@ class EmployerAdmin(admin.ModelAdmin):
     list_display = ('name', 'inn', 'legal_address', 'phone_number', 'email')
     search_fields = ('name', 'inn', 'phone_number', 'email')
     list_filter = ('name',)
+    actions = ['export_to_excel']
 
     def export_to_excel(self, request, queryset):
         wb = openpyxl.Workbook()
