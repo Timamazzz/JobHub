@@ -15,8 +15,8 @@ class ExcursionListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Excursion
-        exclude=['publish_time', ]
-        #fields='__all__'
+        #exclude=['publish_time', ]
+        fields='__all__'
 
     def get_preview_image(self, excursion):
         preview_image = ExcursionImage.objects.filter(excursion=excursion, is_preview=True).first()
@@ -37,8 +37,8 @@ class ExcursionRetrieveSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Excursion
-        exclude = ['id', 'publish_time']
-        #exclude = ['id', ]
+        #exclude = ['id', 'publish_time']
+        exclude = ['id', ]
 
     def get_gallery(self, obj):
         images = ExcursionImage.objects.filter(excursion=obj, is_preview=False)
