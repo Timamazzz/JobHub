@@ -21,6 +21,7 @@ from job_openings_app.serializers.job_opening_serializers import JobOpeningSeria
     JobOpeningCreateUpdateSerializer, JobOpeningListFilterSerializer, WorkOnHolidayDataSerializer
 from users_app.permissions import IsEmployer, IsApplicant, IsApplicantVerify
 from rest_framework.decorators import permission_classes as action_permission_classes
+from django.utils import timezone
 
 
 # Create your views here.
@@ -81,6 +82,15 @@ class JobOpeningViewSet(ModelViewSet):
         job_opening.save()
 
         return Response({'detail': 'Job opening moved to archive.'}, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['post'], url_path='restore-from-archive')
+    def restore_from_archive(self, request, pk=None):
+        job_opening = self.get_object()
+        job_opening.archived = False
+        job_opening.created_at = timezone.now()
+        job_opening.save()
+
+        return Response({'detail': 'Job opening restored from archive.'}, status=status.HTTP_200_OK)
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
