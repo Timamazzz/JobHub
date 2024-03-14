@@ -16,7 +16,17 @@ class EmployerModerationDataSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Employer
-        fields = ('name', 'inn', 'legal_address', 'contact_person_fio', 'contact_person_fio', 'phone_number', 'contact_person_email')
+        fields = ('name', 'inn', 'legal_address', 'contact_person_fio', 'contact_person_fio', 'phone_number', 'description', 'site', 'contact_person_email')
+        extra_kwargs = {
+            'description' : {
+                'required': True,
+                'label': 'Описание организации'
+            },
+            'site': {
+                'required': True,
+                'label': 'Ссылка на сайт организации'
+            },
+        }
 
 
 class EmployerLoginSerializer(serializers.Serializer):
