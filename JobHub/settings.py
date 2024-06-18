@@ -217,6 +217,8 @@ AFTER_VK_AUTH_REDIRECT_REGISTER = '/profile/'
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 CELERY_TIMEZONE = 'Europe/Moscow'
+CELERY_CREATE_MISSING_QUEUES = True
+CELERY_TASK_DEFAULT_QUEUE = os.getenv('QUEUE_DEFAULT', default='celery')
 
 CKEDITOR_CONFIGS = {
     'default': {
